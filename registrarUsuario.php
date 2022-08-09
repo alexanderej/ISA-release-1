@@ -1,41 +1,20 @@
-
 <?php
 
-   session_start();
-
-   require 'conexion.php';
-
-   // valodar siel usuarionesta iniciando sesion o no
-
-   if (!isset($_SESSION['Id_Usuario'])) {
-       header("Location:login.php");
-     }
+session_start();
 
 
 
-    $Id_Usuario=$_SESSION['Id_Usuario'];
-    
-    $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
-    $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
+if (!isset($_SESSION['Id_Usuario'])) {
+    header("Location:login.php");
+}
 
-
-
-    if ($Tipo_Usuario == 1) {
-        $where ="";
-
-    }elseif ($Tipo_Usuario==2) {
-        $where="where Id_Usuario = Id_Usuario";
-    }
-
-    $sql="SELECT *FROM  usuarios $where";
-    
-    $resultado = $mysqli-> query ($sql);
-
-
-    
+$Nombre_Usuario = $_SESSION['Nombre_Usuario'];
+$Tipo_Usuario = $_SESSION['Tipo_Usuario'];
 
 
 ?>
+
+
 
 
 
@@ -50,19 +29,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>Sistema Web Udenar</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -72,9 +48,10 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
+          <!-- este creo que es el menu  -->
+
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-           
             <!-- Sidebar - Brand  AQUI ENRAMOS AL SISTEMA -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-0">
@@ -94,8 +71,7 @@
                     <span>Universidad De Nariño</span></a>
             </li>
 
-
-             <?php if($Tipo_Usuario==2) { ?>
+            <?php if($Tipo_Usuario==1) { ?>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -106,49 +82,45 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+             <!-- Nav Item - Tables -->
+             <li class="nav-item">
+                <a class="nav-link collapsed" href="tables.php" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
+                    <span>Gestion de Usuarios</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                        <a class="collapse-item" href="registrarUsuario.php">Registrar usuario</a>
+                        <a class="collapse-item" href="cards.html">Modificar usuario</a>
+                        <a class="collapse-item" href="cards.html">Eliminar usuario</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li>
+            
+        <?php } ?>
 
+<!-- permitimos el acceso a la secreatria-->
+
+    <?php if($Tipo_Usuario==1) { ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
+
+
+
 
             <!-- Heading -->
             <div class="sidebar-heading">
                 Addons
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
+
+
+            
+
+            <!-- Nav Item - Pages Collapse Menu --
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
@@ -158,7 +130,7 @@
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.php">Login</a>
+                        <a class="collapse-item" href="login.html">Login</a>
                         <a class="collapse-item" href="register.html">Register</a>
                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
                         <div class="collapse-divider"></div>
@@ -169,45 +141,30 @@
                 </div>
             </li>
 
-            <!-- Nav Item - Charts -->
+             Nav Item - Charts 
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Charts</span></a>
             </li>
- <?php  } ?>
-            <!-- Nav Item - Tables -->
+
+            Nav Item - Tables --
             <li class="nav-item">
-                <a class="nav-link collapsed" href="tables.php" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Gestion de Usuarios</span> 
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Estudiantes:</h6>
-                        <a class="collapse-item" href="registrarUsuario.php">Registrar usuario</a>
-                        <a class="collapse-item" href="cards.html">Modificar usuario</a>
-                        <a class="collapse-item" href="cards.html">Eliminar usuario</a>
-                        <h6 class="collapse-header">Docentes:</h6>
-                        <a class="collapse-item" href="registrarUsuario.php">Registrar usuario</a>
-                        <a class="collapse-item" href="cards.html">Modificar usuario</a>
-                        <a class="collapse-item" href="cards.html">Eliminar usuario</a>
-                    </div>
-                </div>
-             
-               
+                <a class="nav-link" href="tables.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Gestion de Usuarios</span></a>
             </li>
 
-
-            <!-- Divider -->
+            -- Divider --
             <hr class="sidebar-divider d-none d-md-block">
 
-            <!-- Sidebar Toggler (Sidebar) -->
+            -- Sidebar Toggler (Sidebar) --
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
-
+--->
+           
+    <?php } ?>
         </ul>
         <!-- End of Sidebar -->
 
@@ -221,25 +178,11 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <form class="form-inline">
-                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                    </form>
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
 
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                  
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -388,19 +331,28 @@
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
+
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"> <?php echo $Nombre_Usuario; ?> </span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
+
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                
-                                
-                                
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Perfil
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Configuración
+                               
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="logout.php" >
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -417,125 +369,190 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Registro </title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+        <div class="empleado">
+            <h1>Formulario de Registro de Usuario</h1><br>
+        </div>
+    <form action="registrarformulario.php" method="POST">
 
+        
+
+    <div class="nom1">
+            <label style="color: cornflowerblue;">1.</label>
+            <label for="nombre">codigo</label><br> <br>
+            <input type="text" name="Codigo_Estu" id="codigo" placeholder="" required><br> <br><br>
+     </div>
+       
+        
+        <div class="nom">
+            <label style="color: cornflowerblue;">2.</label>
+            <label for="nombre">Nombres</label><br /> <br />
+            <input type="text" name="Nombre_Estu" id="nombre2" ><br> <br><br>
+      </div>
+     
+      
+       <div class="nom1">
+            <label style="color: cornflowerblue;">3.</label>
+            <label for="nombre">Apellidos</label><br> <br>
+            <input type="text" name="Apellidos_Estu" id="apellido2" ><br> <br><br>
+     </div>
+
+        <div class="nom1">
+            <label style="color: cornflowerblue;">4.</label>
+            <label for="nombre">programa</label><br> <br>
+            <input type="text" name="Programa_Estu" id="programa" placeholder="" required><br> <br><br>
+     </div>
+
+
+       <div class="nom1">
+            <label style="color: cornflowerblue;">5.</label>
+            <label for="nombre">correo</label><br> <br>
+            <input type="text" name="Correo_Estu" id="Correo_Estu" placeholder="" required><br> <br><br>
+      </div>
+         
+
+      <div class="nom1">
+        <label style="color: cornflowerblue;">6.</label>
+        <label for="nombre">celular</label><br> <br>
+        <input type="text" name="Cel_Estu" id="apellido1" placeholder="" required><br> <br><br>
+     </div>
+
+     <div class="nom1">
+        <label style="color: cornflowerblue;">7.</label>
+        <label for="nombre">Sede</label><br> <br>
+        <input type="text" name="Sede_Estu" id="apellido1" placeholder="" required><br> <br><br>
+    </div>
+
+     
+       <div class="nom12">
+            <button class="boton">Registrar</button>
+       </div>
+     
+   </div>
+ </form>    
+</body>
+</html>
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                    <p class="mb-4"><a target="_blank"
-                            href=""></a>.</p>
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Escritorio De Información ----aqui va formulario</h1>
 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Usuarios</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>usuario</th>
-                                            <th>Password</th>
-                                            <th>Nombre</th>
-                                            <th>Tipo Usuario</th>
-                                            
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>usuario</th>
-                                            <th>Password</th>
-                                            <th>Nombre</th>
-                                            <th>Tipo Usuario</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                       <?php while ($row=$resultado->fetch_assoc() ) { ?>
-                                            <tr>
-                                               <td><?php echo $row['Usuario'] ?></td> 
-
-                                               <td><?php echo $row['Password']; ?></td> 
-                                               <td> <?php echo $row['Nombre_Usuario']; ?></td>     
-                                               <td><?php echo $row['Tipo_Usuario']; ?> </td>
-                                               
-
-                                            </tr> 
-
-                                        <?php } ?>                                          
-                                    </tbody>
+                        
+                       
+                    -------------------------------------------------------------
 
 
-                                </table>
 
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">estudiantes</h6>
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        
+
+                        <!-- Pending Requests Card Example -->
+
+                         <?php if($Tipo_Usuario==2) { ?>
+                       
+
+                    <!-- Content Row -->
+
+                    <br>
+                    <br>
+
+                    <div class="row ">
+
+                        <!-- Area Chart  este es el cuadro donde van  los reuiqsitos -->
+                        <div class="col-xl-9 col-lg-10">
+                            
+                            <div class="card shadow mb-4" >
+
+
+
+                                <!-- Card Header - Dropdown -->
+                              
+
+
+                                <!-- Card Body -->
+                               
                                 </div>
-
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>codigo</th>
-                                            <th>nombre</th>
-                                            <th>apellidos</th>
-                                            <th>programa</th>
-                                             <th>correo</th>
-                                              <th>celular</th>
-                                               <th>sede</th>
-                                            
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                             <th>codigo</th>
-                                            <th>nombre</th>
-                                            <th>apellidos</th>
-                                            <th>programa</th>
-                                             <th>correo</th>
-                                              <th>celular</th>
-                                               <th>sede</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                       <?php while ($row=$resultado->fetch_assoc() ) { ?>
-                                            <tr>
-                                               <td><?php echo $row['Codigo_Estu'] ?></td> 
-
-                                               <td><?php echo $row['Nombre_Estu']; ?></td> 
-                                               <td> <?php echo $row['Apellidos_Estu']; ?></td>     
-                                               <td><?php echo $row['Programa_Estu']; ?> </td>
-
-                                               <td><?php echo $row['Correo_Estu']; ?> </td>
-
-                                               <td><?php echo $row['Cel_Estu']; ?> </td>
-
-                                               <td><?php echo $row['Sede_Estu']; ?> </td>
-                                               
-
-                                            </tr> 
-
-                                        <?php } ?>                                          
-                                    </tbody>
-                                </table>
-
-
-
-
-
-
                             </div>
+                        </div>
+
+                         <?php } ?>
+
+                        <!-- Pie Chart -->
+                        
+                                <!-- Card Body -->
+                                
+
+                    <!-- Content Row -->
+                    <div class="row">
+
+                        <!-- Content Column -->
+                        
+
+                        <div class="col-lg-6 mb-4">
+  
+
+                        <!---
+                        -- Illustrations --
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center">
+                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+                                            src="img/undraw_posting_photo.svg" alt="...">
+                                    </div>
+                                    <p>Add some quality, svg illustrations to your project courtesy of <a
+                                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
+                                        constantly updated collection of beautiful svg images that you can use
+                                        completely free and without attribution!</p>
+                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
+                                        unDraw &rarr;</a>
+                                </div>
+                            </div>
+
+                            -- Approach --
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>                </p>
+                                    <p class="mb-0">                            </p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
                 </div>
-                <!-- /.container-fluid -->
+                -- /.container-fluid --
 
             </div>
-            <!-- End of Main Content -->
+            -- End of Main Content -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; VisionSoft 2022</span>
                     </div>
                 </div>
             </footer>
@@ -583,11 +600,11 @@
     <script src="js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="js/demo/chart-pie-demo.js"></script>
 
 </body>
 
