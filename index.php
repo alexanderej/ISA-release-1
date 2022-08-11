@@ -1,22 +1,33 @@
 <?php
-
+require 'conexion.php';
 session_start();
-
-
 
 if (!isset($_SESSION['Id_Usuario'])) {
     header("Location:login.php");
 }
-
+$Id_Usuario = $_SESSION['Id_Usuario'];
 $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
 $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
+$nombre="";
+if($Tipo_Usuario==3){
+    $sql="SELECT * FROM  docentes WHERE Codigo_Doc = $Id_Usuario";
+        $resultado = $mysqli-> query ($sql);
 
+    while ($row=$resultado->fetch_assoc() ) {
+        $nombre = $row['Nombre_Doc'].' '.$row['Apellidos_Doc'];
+    }
+}
+if($Tipo_Usuario==2){
+    $sql="SELECT * FROM  estudiantes WHERE Codigo_Est = $Id_Usuario";
+        $resultado = $mysqli-> query ($sql);
 
+    while ($row=$resultado->fetch_assoc() ) {
+        $nombre = $row['Nombre_Est'].' '.$row['Apellidos_Est'];
+    }
+}
+
+    
 ?>
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -136,15 +147,15 @@ $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Agregar Usuario</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                        <h6 class="collapse-header">Seleccione Tipo de Usuario:</h6>
+                        <a class="collapse-item" href="agregarEstudiante.php">Nuevo Estudiante</a>
+                        <a class="collapse-item" href="agregarDocente.php">Nuevo Docente</a>
+                        <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
                         <a class="collapse-item" href="404.html">404 Page</a>
@@ -349,7 +360,11 @@ $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
 
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"> <?php echo $Nombre_Usuario; ?> </span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"> 
+                                    <?php echo $Nombre_Usuario.'<br>'.$nombre; 
+                                    
+                                    ?> 
+                                </span>
                                 <img class="img-profile rounded-circle"
                                     src="img/undraw_profile.svg">
                             </a>
@@ -384,9 +399,14 @@ $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Escritorio De Información</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        <h1 class="h3 mb-0 text-gray-800">Escritorio De Información este lo edite</h1>
+                        <?php if($Tipo_Usuario==1) { ?>
+                        <a href="register.html" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Agregar Usuario</a>
+                                <?php }?>
+                        <?php if($Tipo_Usuario==2) { ?>
+                        <a href="registrar.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Cargar</a>
+                                <?php }?>
                     </div>
 
                     <!-- Content Row -->
