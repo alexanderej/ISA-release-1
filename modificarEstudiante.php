@@ -6,6 +6,12 @@ session_start();
 $errors = array();
 $mensaje = array();
 
+$id = $_GET['id'];
+	
+	$sql = "SELECT * FROM estudiantes WHERE Codigo_Est = '$id'";
+	$resultado = $mysqli->query($sql);
+	$row = $resultado->fetch_assoc();
+	
 if($_POST){
     //echo 'Funciona post';
 ////obtener los valores de las variables del formulario
@@ -25,27 +31,27 @@ if($_POST){
     if(!isEmail($email)){
         $errors[] = "Direccion de correo no valida";
     }
-    if(usuarioExiste($codigo)){
-        $errors[] = "El código $codigo ya existe";
-    }
+    
 
     if(count($errors) == 0){
         ///Registrar nuevo estudiante y usuario
-        $sql = "INSERT INTO estudiantes (Codigo_Est, Cedula_Est, Nombre_Est, Apellidos_Est, Programa_Est, Correo_Est, Cel_Est, Sede_Est) VALUES ('$codigo','$cedula','$nombre','$apellidos','$programa', '$email',   '$celular', '$sede')";
+        $sql = "UPDATE estudiantes SET Codigo_Est='$codigo', Cedula_Est='$cedula', Nombre_Est='$nombre', Apellidos_Est='$apellidos', Programa_Est='$programa', Correo_Est='$email', Cel_Est='$celular', Sede_Est='$sede' WHERE Codigo_Est = '$id'";
         $resultado=$mysqli->query($sql);
         //echo $resultado;
 
         $pass= sha1 ($cedula);
-        $sql2 = "INSERT INTO usuarios (Id_Usuario, Usuario, Password, Nombre_Usuario, Tipo_Usuario) VALUES ('$codigo','$codigo', '$pass', 'ESTUDIANTE', '2')";
+        $sql2 = "UPDATE usuarios SET Id_Usuario='$codigo', Usuario='$codigo', Password='$pass', Nombre_Usuario='ESTUDIANTE', Tipo_Usuario='2' WHERE Id_Usuario = '$id'";
         $resultado2=$mysqli->query($sql2);
+        //echo $resultado2;
+
 
         if($resultado && $resultado2){
-            $mensaje[] ="El Estudiante $nombre $apellidos ha sido registrado exitosamente";
+            $mensaje[] ="Los datos del Estudiante $nombre $apellidos han sido modificados exitosamente";
             ////////enviar un correo//////////////////////////////////////
             $url = 'http://'.$_SERVER["SERVER_NAME"].'/ISA-release-1/login.php';
 
-            $asunto = 'Registro Cuenta - Sistema Gestion Modalidades de Grado';
-            $cuerpo = "Estimado $nombre $apellidos: <br> ha sido registrado exitosamente al sistema de gestion de proyectos de grado <br>puede acceder al sistema con:<br>Usuario: $codigo<br>Contraseña: $cedula<br> <a href='$url'>Ir a página web</a>";
+            $asunto = 'Modificación de Cuenta - Sistema Gestion Modalidades de Grado';
+            $cuerpo = "Estimado $nombre $apellidos: <br>sus datos han sido modificados exitosamente al sistema de gestion de proyectos de grado <br>puede acceder al sistema con:<br>Usuario: $codigo<br>Contraseña: $cedula<br> <a href='$url'>Ir a página web</a>";
 
             if(enviarEmail($email, $nombre, $asunto, $cuerpo)){
                 $mensaje[] = "<br>Se ha enviado las credenciales al correo: $email";
@@ -56,7 +62,7 @@ if($_POST){
             //////////*///////////////////////////////////
         }
         else{
-            $errors[] = "Falló registrar el estudiante. ";
+            $errors[] = "Falló modificar el estudiante. ";
         }
         
     }
@@ -75,7 +81,7 @@ if($_POST){
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Registrar Estudiante</title>
+    <title>Modificar Estudiante</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -103,41 +109,41 @@ if($_POST){
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Registrar Estudiante</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Modificar Estudiante</h1>
                             </div>
                             <form class="user" action="<?php $_SERVER['PHP_SELF'] ?>" method="POST">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="text" class="form-control form-control-user" name="nombreE"
-                                            placeholder="Nombres">
+                                            placeholder="Nombres" value="<?php echo $row['Nombre_Est']; ?>">
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control form-control-user" name="apellidoE"
-                                            placeholder="Apellidos">
+                                            placeholder="Apellidos" value="<?php echo $row['Apellidos_Est']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <input type="email" class="form-control form-control-user" name="email"
-                                        placeholder="Correo Electrónico">
+                                        placeholder="Correo Electrónico" value="<?php echo $row['Correo_Est']; ?>">
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="number" class="form-control form-control-user" name="cedula"
-                                            placeholder="No de Identificación">
+                                            placeholder="No de Identificación" value="<?php echo $row['Cedula_Est'] ?>">
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="number" class="form-control form-control-user" name="codigo"
-                                            placeholder="Código del Estudiante">
+                                            placeholder="Código del Estudiante" value="<?php echo $row['Codigo_Est'] ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="number" class="form-control form-control-user" name="celular"
-                                            placeholder="Celular">
+                                            placeholder="Celular" value="<?php echo $row['Cel_Est']; ?>">
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control form-control-user" name="programa"
-                                            placeholder="Programa Académico">
+                                            placeholder="Programa Académico" value="<?php echo $row['Programa_Est']; ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -145,10 +151,10 @@ if($_POST){
 
                                         <select name="sede" class="form-control">
                                             <option value="">Seleccionar Sede</option>
-                                            <option value="Pasto">Pasto</option>
-                                            <option value="Tuquerres">Túquerres</option>
-                                            <option value="Ipiales">Ipiales</option>
-                                            <option value="Tumaco">Tumaco</option>
+                                            <option value="Pasto"<?php if($row['Sede_Est']=='Pasto') echo 'selected'; ?>>Pasto</option>
+                                            <option value="Tuquerres" <?php if($row['Sede_Est']=='Tuquerres') echo 'selected'; ?>>Túquerres</option>
+                                            <option value="Ipiales"<?php if($row['Sede_Est']=='Ipiales') echo 'selected'; ?>>Ipiales</option>
+                                            <option value="Tumaco"<?php if($row['Sede_Est']=='Tumaco') echo 'selected'; ?>>Tumaco</option>
                                         </select>
 
                                     </div>
@@ -157,7 +163,7 @@ if($_POST){
                                             id="codigo" placeholder="Código del Estudiante">
                                     </div> -->
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-user btn-block">Registrar
+                                <button type="submit" class="btn btn-primary btn-user btn-block">Modificar
                                     Estudiante</button>
 
 
@@ -174,13 +180,13 @@ if($_POST){
                             if(count($mensaje) > 0){
                                 echo '
                                 <div class="col-lg-6 mb-4">
-                                    <div class="card bg-success text-white shadow">
+                                    <div class="card bg-info text-white shadow">
                                         <div class="card-body">';
                                         foreach($mensaje as $msg)
 			{
 				echo "<li>".$msg."</li>";
 			}
-                                        echo '<div class="text-white-50 small">#Registro Exitoso</div>
+                                        echo '<div class="text-white-50 small">#Registro Modificado</div>
                                         </div>
                                     </div>
                                 </div>
@@ -188,7 +194,7 @@ if($_POST){
                             }
                             ?>
                             <a href="index.php" class="btn btn-primary">
-                                Regresar
+                                Página Principal
                             </a>
                             <!-- <hr>
                             <div class="text-center">

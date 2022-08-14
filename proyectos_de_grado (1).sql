@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-08-2022 a las 03:06:39
+-- Tiempo de generación: 15-08-2022 a las 01:45:24
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.28
 
@@ -20,6 +20,29 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `proyectos_de_grado`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `admin`
+--
+
+CREATE TABLE `admin` (
+  `Codigo_Adm` int(15) NOT NULL,
+  `Nombre_Adm` varchar(50) NOT NULL,
+  `Apellidos_Adm` varchar(50) NOT NULL,
+  `Cedula_Adm` int(15) NOT NULL,
+  `Cel_Adm` int(15) NOT NULL,
+  `Correo_Adm` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `admin`
+--
+
+INSERT INTO `admin` (`Codigo_Adm`, `Nombre_Adm`, `Apellidos_Adm`, `Cedula_Adm`, `Cel_Adm`, `Correo_Adm`) VALUES
+(0, 'admin', 'admin', 0, 123456789, 'admin@admin.co'),
+(217036022, 'Santiago', 'Coral', 1088219264, 2147483647, 'santiagocoral80@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -72,11 +95,18 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`Id_Usuario`, `Usuario`, `Password`, `Nombre_Usuario`, `Tipo_Usuario`) VALUES
-(5, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'admin', 1);
+(5, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'admin', 1),
+(217036022, '217036022', '4a22af727c7201f7d3a7632d0b13e9d805753c3d', 'ADMINISTRADOR', 1);
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`Codigo_Adm`);
 
 --
 -- Indices de la tabla `docentes`

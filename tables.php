@@ -1,8 +1,6 @@
-
 <?php
 
    session_start();
-
    require 'conexion.php';
 
    // valodar siel usuarionesta iniciando sesion o no
@@ -11,33 +9,34 @@
        header("Location:login.php");
      }
 
-
-
-    $Id_Usuario=$_SESSION['Id_Usuario'];
-    
+    $Id_Usuario=$_SESSION['Id_Usuario'];    
     $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
     $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
-
+    $nombre="";
 
 
     if ($Tipo_Usuario == 1) {
-        $where ="";
+        $sqlA="SELECT * FROM  admin WHERE Codigo_Adm = $Id_Usuario";
+        $resultadoA = $mysqli-> query ($sqlA);
 
-    }elseif ($Tipo_Usuario==2) {
-        $where="where Id_Usuario = Id_Usuario";
+        while ($row=$resultadoA->fetch_assoc() ) {
+            $nombre = $row['Nombre_Adm'].' '.$row['Apellidos_Adm'];
+        }
+
     }
 
-    $sql="SELECT *FROM  usuarios $where";
-    
+    $sql="SELECT *FROM  usuarios";
     $resultado = $mysqli-> query ($sql);
-
-
+    $sqlA="SELECT * FROM  admin";
+    $resultadoA = $mysqli-> query ($sqlA);
+    $sqlE="SELECT * FROM  estudiantes";
+    $resultadoE = $mysqli-> query ($sqlE);
+    $sqlD="SELECT * FROM  docentes";
+    $resultadoD = $mysqli-> query ($sqlD);
     
 
 
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -63,7 +62,7 @@
 
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+    
 </head>
 
 <body id="page-top">
@@ -74,11 +73,11 @@
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-           
+
             <!-- Sidebar - Brand  AQUI ENRAMOS AL SISTEMA -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-0">
-                    <img src="img/logo1.png" aling="center" width="60", height="60" >
+                    <img src="img/logo1.png" aling="center" width="60" , height="60">
                 </div>
                 <div class="sidebar-brand-text mx-3">GESTION MODALIDADES DE GRADO</div>
             </a>
@@ -89,78 +88,31 @@
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="index.php">
-                    
-                
+
+
                     <span>Universidad De Nariño</span></a>
             </li>
 
-
-             <?php if($Tipo_Usuario==2) { ?>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
-
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Addons
+                Acciones
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Agregar Usuario</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.php">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                        <h6 class="collapse-header">Seleccione Tipo de Usuario:</h6>
+                        <a class="collapse-item" href="agregarEstudiante.php">Nuevo Estudiante</a>
+                        <a class="collapse-item" href="agregarDocente.php">Nuevo Docente</a>
+                        <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a> -->
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
                         <a class="collapse-item" href="404.html">404 Page</a>
@@ -169,13 +121,13 @@
                 </div>
             </li>
 
-            <!-- Nav Item - Charts -->
+            <!-- Nav Item - Charts 
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Charts</span></a>
-            </li>
- <?php  } ?>
+            </li>-->
+
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="tables.php">
@@ -210,7 +162,7 @@
                         </button>
                     </form>
 
-                    <!-- Topbar Search -->
+                    <!-- Topbar Search 
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
@@ -222,7 +174,7 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form>-->
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -318,8 +270,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -330,8 +281,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -342,8 +292,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
+                                        <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -371,25 +320,35 @@
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
+
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"> <?php echo $Nombre_Usuario; ?> </span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+
+
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?php echo $Nombre_Usuario.'<br>'.$nombre; 
+            
+            ?>
+                                </span>
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
+
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                
-                                
-                                
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="logout.php" >
+                                <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                   
-                                    Salir
+                                    Perfil
                                 </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Configuración
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="logout.php">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Salir
+                                    </a>
                             </div>
                         </li>
 
@@ -400,11 +359,12 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <a href="agregarAdmin.php"
+                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Agregar Administrador</a>
+                    </div>
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                    <p class="mb-4"><a target="_blank"
-                            href=""></a>.</p>
+                    <h1 class="h3 mb-2 text-gray-800">Mostrando usuarios registrados...</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -416,11 +376,10 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>usuario</th>
+                                            <th>Usuario</th>
                                             <th>Password</th>
                                             <th>Nombre</th>
                                             <th>Tipo Usuario</th>
-                                            
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -432,78 +391,213 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                       <?php while ($row=$resultado->fetch_assoc() ) { ?>
-                                            <tr>
-                                               <td><?php echo $row['Usuario'] ?></td> 
+                                        <?php while ($row=$resultado->fetch_assoc() ) { ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo $row['Usuario'] ?>
+                                            </td>
 
-                                               <td><?php echo $row['Password']; ?></td> 
-                                               <td> <?php echo $row['Nombre_Usuario']; ?></td>     
-                                               <td><?php echo $row['Tipo_Usuario']; ?> </td>
-                                               
-
-                                            </tr> 
-
-                                        <?php } ?>                                          
+                                            <td>
+                                                <?php echo $row['Password']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Nombre_Usuario']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Tipo_Usuario']; ?>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
                                     </tbody>
-
-
                                 </table>
+                            </div>
+                        </div>
 
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">estudiantes</h6>
-                                </div>
-
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Administradores</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>codigo</th>
-                                            <th>nombre</th>
-                                            <th>apellidos</th>
-                                            <th>programa</th>
-                                             <th>correo</th>
-                                              <th>celular</th>
-                                               <th>sede</th>
-                                            
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>Cédula</th>
+                                            <th>Celular</th>
+                                            <th>Correo</th>
+                                            <th colspan="2">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>Cédula</th>
+                                            <th>Celular</th>
+                                            <th>Correo</th>
+                                            <th colspan="2">Acciones</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <?php while ($row=$resultadoA->fetch_assoc() ) { ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo $row['Codigo_Adm'] ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Nombre_Adm'] ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Apellidos_Adm']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Cedula_Adm']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Cel_Adm']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Correo_Adm']; ?>
+                                            </td>
+                                            <td> <a href="modificar.php?id=<?php echo $row['id']; ?>">Modificar<span
+                                                        class="glyphicon glyphicon-pencil"></span> </a> </td>
+                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>">Eliminar <span
+                                                        class="glyphicon glyphicon-trash"></span> </a> </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Estudiantes</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Cédula</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>Programa</th>
+                                            <th>Correo</th>
+                                            <th>Celular</th>
+                                            <th>Sede</th>
+                                            <th colspan="2">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                             <th>codigo</th>
-                                            <th>nombre</th>
-                                            <th>apellidos</th>
-                                            <th>programa</th>
-                                             <th>correo</th>
-                                              <th>celular</th>
-                                               <th>sede</th>
+                                            <th>Código</th>
+                                            <th>Cédula</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>Programa</th>
+                                            <th>Correo</th>
+                                            <th>Celular</th>
+                                            <th>Sede</th>
+                                            <th colspan="2"></th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                       <?php while ($row=$resultado->fetch_assoc() ) { ?>
-                                            <tr>
-                                               <td><?php echo $row['Codigo_Estu'] ?></td> 
-
-                                               <td><?php echo $row['Nombre_Estu']; ?></td> 
-                                               <td> <?php echo $row['Apellidos_Estu']; ?></td>     
-                                               <td><?php echo $row['Programa_Estu']; ?> </td>
-
-                                               <td><?php echo $row['Correo_Estu']; ?> </td>
-
-                                               <td><?php echo $row['Cel_Estu']; ?> </td>
-
-                                               <td><?php echo $row['Sede_Estu']; ?> </td>
-                                               
-
-                                            </tr> 
-
-                                        <?php } ?>                                          
+                                        <?php while ($row=$resultadoE->fetch_assoc() ) { ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo $row['Codigo_Est'] ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Cedula_Est'] ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Nombre_Est']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Apellidos_Est']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Programa_Est']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Correo_Est']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Cel_Est']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Sede_Est']; ?>
+                                            </td>
+                                            <td> <a href="modificarEstudiante.php?id=<?php echo $row['Codigo_Est']; ?>">Modificar<span
+                                                        class="glyphicon glyphicon-pencil"></span> </a> </td>
+                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>">Eliminar <span
+                                                        class="glyphicon glyphicon-trash"></span> </a> </td>
+                                        </tr>
+                                        <?php } ?>
                                     </tbody>
                                 </table>
-
-
-
-
-
-
+                            </div>
+                        </div>
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Docentes</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Cédula</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>Correo</th>
+                                            <th>Celular</th>
+                                            <th colspan="2">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Cédula</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>Correo</th>
+                                            <th>Celular</th>
+                                            <th colspan="2">Acciones</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <?php while ($row=$resultadoD->fetch_assoc() ) { ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo $row['Codigo_Doc'] ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Cedula_Doc'] ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Nombre_Doc']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Apellidos_Doc']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Correo_Doc']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Cel_Doc']; ?>
+                                            </td>
+                                            <td> <a href="modificar.php?id=<?php echo $row['id']; ?>">Modificar<span
+                                                        class="glyphicon glyphicon-pencil"></span> </a> </td>
+                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>">Eliminar <span
+                                                        class="glyphicon glyphicon-trash"></span> </a> </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -571,7 +665,7 @@
 
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
-
+    <script src="./css/bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>

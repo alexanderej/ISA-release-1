@@ -25,6 +25,14 @@ if($Tipo_Usuario==2){
         $nombre = $row['Nombre_Est'].' '.$row['Apellidos_Est'];
     }
 }
+if($Tipo_Usuario==1){
+    $sql="SELECT * FROM  admin WHERE Codigo_Adm = $Id_Usuario";
+        $resultado = $mysqli-> query ($sql);
+
+    while ($row=$resultado->fetch_assoc() ) {
+        $nombre = $row['Nombre_Adm'].' '.$row['Apellidos_Adm'];
+    }
+}
 
     
 ?>
@@ -64,7 +72,7 @@ if($Tipo_Usuario==2){
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand  AQUI ENRAMOS AL SISTEMA -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-0">
                     <img src="img/logo1.png" aling="center" width="60", height="60" >
                 </div>
@@ -76,9 +84,7 @@ if($Tipo_Usuario==2){
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    
-                
+                <a class="nav-link" href="index.php">
                     <span>Universidad De Nariño</span></a>
             </li>
 
@@ -134,13 +140,9 @@ if($Tipo_Usuario==2){
     <?php if($Tipo_Usuario==1) { ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
-
-
-
-
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                Acciones
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -164,12 +166,12 @@ if($Tipo_Usuario==2){
                 </div>
             </li>
 
-            <!-- Nav Item - Charts -->
+            <!-- Nav Item - Charts 
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Charts</span></a>
-            </li>
+            </li>-->
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
@@ -379,11 +381,9 @@ if($Tipo_Usuario==2){
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Configuración
-                               
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="logout.php" >
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                   
                                     Salir
                                 </a>
                             </div>
@@ -399,14 +399,14 @@ if($Tipo_Usuario==2){
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Escritorio De Información este lo edite</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Escritorio De Información</h1>
                         <?php if($Tipo_Usuario==1) { ?>
-                        <a href="register.html" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Agregar Usuario</a>
-                                <?php }?>
+                            <a href="agregarAdmin.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Agregar Administrador</a>
+                        <?php }?>
                         <?php if($Tipo_Usuario==2) { ?>
                         <a href="registrar.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Cargar</a>
-                                <?php }?>
+                            class="fas fa-download fa-sm text-white-50"></i> Cargar</a>
+                        <?php }?>
                     </div>
 
                     <!-- Content Row -->

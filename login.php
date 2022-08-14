@@ -2,7 +2,10 @@
 <?php
 
 require "conexion.php";
+require 'funcs.php';
+
 session_start();
+$errors = array();
 
 if ($_POST){
 
@@ -31,12 +34,13 @@ if ($_POST){
             
 
 	    }  else{
-
-	            echo "la contraseña no coincide";
+            $errors[] = "La contraseña no coincide";
+	            //echo "la contraseña no coincide";
 	        }
         
     }else{
-        echo "no existe";
+        $errors[] = "Debe llenar todos los campos";
+        //echo "no existe";
     }
 
 
@@ -45,7 +49,7 @@ if ($_POST){
 ?> 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
 
@@ -129,12 +133,13 @@ if ($_POST){
                                         
                                     </form>
                                     <hr>
+                                    <?php echo resultBlock($errors); ?>
                                     <div class="text-center">
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>
                                     </div>
-                                    <div class="text-center">
+                                    <!-- <div class="text-center">
                                         <a class="small" href="register.html">Create an Account!</a>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
