@@ -462,10 +462,10 @@
                                             <td>
                                                 <?php echo $row['Correo_Adm']; ?>
                                             </td>
-                                            <td> <a href="modificar.php?id=<?php echo $row['id']; ?>">Modificar<span
-                                                        class="glyphicon glyphicon-pencil"></span> </a> </td>
-                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>">Eliminar <span
-                                                        class="glyphicon glyphicon-trash"></span> </a> </td>
+                                            <td> <a href="modificar.php?id=<?php echo $row['id']; ?>"><span
+                                            class="fas fa-pencil-alt"></span>Modificar </a> </td>
+                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>"> <span
+                                            class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>
                                     </tbody>
@@ -531,10 +531,10 @@
                                             <td>
                                                 <?php echo $row['Sede_Est']; ?>
                                             </td>
-                                            <td> <a href="modificarEstudiante.php?id=<?php echo $row['Codigo_Est']; ?>">Modificar<span
-                                                        class="glyphicon glyphicon-pencil"></span> </a> </td>
-                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>">Eliminar <span
-                                                        class="glyphicon glyphicon-trash"></span> </a> </td>
+                                            <td> <a href="modificarEstudiante.php?id=<?php echo $row['Codigo_Est']; ?>"><span
+                                            class="fas fa-pencil-alt"></span>Modificar </a> </td>
+                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>"> <span
+                                            class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>
                                     </tbody>
@@ -590,10 +590,10 @@
                                             <td>
                                                 <?php echo $row['Cel_Doc']; ?>
                                             </td>
-                                            <td> <a href="modificar.php?id=<?php echo $row['id']; ?>">Modificar<span
-                                                        class="glyphicon glyphicon-pencil"></span> </a> </td>
-                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>">Eliminar <span
-                                                        class="glyphicon glyphicon-trash"></span> </a> </td>
+                                            <td> <a href="modificar.php?id=<?php echo $row['id']; ?>"><span
+                                            class="fas fa-pencil-alt"></span>Modificar </a> </td>
+                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>"> <span
+                                            class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>
                                     </tbody>
