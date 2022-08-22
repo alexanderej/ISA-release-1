@@ -9,25 +9,49 @@ $Id_Usuario = $_SESSION['Id_Usuario'];
 $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
 $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
 $nombre="";
-if($Tipo_Usuario==3){
-    $sql="SELECT * FROM  docentes WHERE Codigo_Doc = $Id_Usuario";
-        $resultado = $mysqli-> query ($sql);
-    while ($row=$resultado->fetch_assoc() ) {
+if($Tipo_Usuario==3){//Docentes
+    $sqlD="SELECT * FROM  docentes WHERE Codigo_Doc = $Id_Usuario";
+    $resultadoD = $mysqli-> query ($sqlD);
+    while ($row=$resultadoD->fetch_assoc() ) {
         $nombre = $row['Nombre_Doc'].' '.$row['Apellidos_Doc'];
+
+        $codD=$row['Codigo_Doc'];
+        $cedD=$row['Cedula_Doc'];
+        $nomD=$row['Nombre_Doc'];
+        $apeD=$row['Apellidos_Doc'];
+        $correoD=$row['Correo_Doc'];
+        $celD=$row['Cel_Doc'];
     }
 }
-if($Tipo_Usuario==2){
-    $sql="SELECT * FROM  estudiantes WHERE Codigo_Est = $Id_Usuario";
-        $resultado = $mysqli-> query ($sql);
-    while ($row=$resultado->fetch_assoc() ) {
+if($Tipo_Usuario==2){///Estudiantes
+    $sqlE="SELECT * FROM  estudiantes WHERE Codigo_Est = $Id_Usuario";
+    $resultadoE = $mysqli-> query ($sqlE);
+    while ($row=$resultadoE->fetch_assoc() ) {
         $nombre = $row['Nombre_Est'].' '.$row['Apellidos_Est'];
+        
+        $codE=$row['Codigo_Est']; 
+        $cedE=$row['Cedula_Est']; 
+        $nomE=$row['Nombre_Est']; 
+        $apeE=$row['Apellidos_Est'];
+        $progE=$row['Programa_Est'];
+        $correoE=$row['Correo_Est'];
+        $celE=$row['Cel_Est'];
+        $sedeE=$row['Sede_Est'];
+
     }
 }
-if($Tipo_Usuario==1){
-    $sql="SELECT * FROM  admin WHERE Codigo_Adm = $Id_Usuario";
-        $resultado = $mysqli-> query ($sql);
-    while ($row=$resultado->fetch_assoc() ) {
+if($Tipo_Usuario==1){///Admin
+    $sqlA="SELECT * FROM  admin WHERE Codigo_Adm = $Id_Usuario";
+    $resultadoA = $mysqli-> query ($sqlA);
+    while ($row=$resultadoA->fetch_assoc() ) {
         $nombre = $row['Nombre_Adm'].' '.$row['Apellidos_Adm'];
+
+        $codA=$row['Codigo_Adm'];
+        $nomA=$row['Nombre_Adm'];
+        $apeA=$row['Apellidos_Adm'];
+        $cedA=$row['Cedula_Adm'];
+        $celA=$row['Cel_Adm'];
+        $correoA=$row['Correo_Adm'];
     }
 }
    
@@ -35,6 +59,7 @@ if($Tipo_Usuario==1){
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -241,72 +266,153 @@ if($Tipo_Usuario==1){
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Escritorio De Información</h1>
-                        <?php if($Tipo_Usuario==1) { ?>
-                        <a href="agregarAdmin.php"
-                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Agregar Administrador</a>
-                        <?php }?>
+                        <h1 class="h3 mb-0 text-gray-800">Perfil de Usuario</h1>
                     </div>
-                    <!-- Content Row -->
-                    <div class="row">
-                        <!-- Earnings (Monthly) Card Example -->
-                        <!-- Pending Requests Card Example -->
-                        <?php if($Tipo_Usuario==2) { ?>
-                        <div class="">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Importante</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Tener aprobado el 75% de
-                                                la totalidad de los creditos de su plan de estudio, incluidos los de
-                                                formacion humanistica y competencias basicas </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
+
+                    <!-- Illustrations -->
+                    <div class="card shadow mb-4">
+                        <?php if($Tipo_Usuario==1){ ?>
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Datos del Administrador</h6>
                         </div>
-                    </div>
-                    <!-- Content Row -->
-                    <br>
-                    <br>
-                    <div class="row ">
-                        <!-- Area Chart  este es el cuadro donde van  los reuiqsitos -->
-                        <div class="col-xl-9 col-lg-10">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Requisitos</h6>
-                                    <div class="dropdown no-arrow">
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <p>
-                                        <h4> - Propuesta de trabajo de grado - Formato IEEE</h4>
-                                        <br>
-                                        <h4> - Estudio de hoja de vida</h4>
-                                        <br>
-                                        <h4> - Certificado de matricula</h4>
-                                        <br>
-                                        <h4> - Comprobande de pago de los derechos de inscripción</h4>
-                                        <br>
-                                        <h4> - Formato de la presentación de la propuesta firmada</h4>
-                                        </p>
-                                    </div>
-                                </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>Cédula</th>
+                                            <th>Celular</th>
+                                            <th>Correo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <?php echo $codA; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $nomA; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $apeA; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $cedA; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $celA; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $correoA; ?>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <?php } ?>
-                        <!-- Pie Chart -->
-                        <!-- Card Body -->
-                        <!-- Content Row -->
-                        
+
+                        <?php if($Tipo_Usuario==2){ ?>
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Datos del estudiante</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Cédula</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>Programa</th>
+                                            <th>Correo</th>
+                                            <th>Celular</th>
+                                            <th>Sede</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <?php echo $codE; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $cedE; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $nomE; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $apeE; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $progE; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $correoE; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $celE; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $sedeE; ?>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <?php if($Tipo_Usuario==3){ ?>
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Datos del Docente</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Cédula</th>
+                                            <th>Nombre</th>
+                                            <th>Apellidos</th>
+                                            <th>Correo</th>
+                                            <th>Celular</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <?php echo $codD; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $cedD; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $nomD; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $apeD; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $correoD; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $celD; ?>
+                                            </td>
+                                            
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <?php } ?>
+
                     </div>
+
                     <!-- /.container-fluid -->
                 </div>
                 <!-- End of Main Content -->
@@ -359,4 +465,5 @@ if($Tipo_Usuario==1){
         <script src="js/demo/chart-area-demo.js"></script>
         <script src="js/demo/chart-pie-demo.js"></script>
 </body>
+
 </html>

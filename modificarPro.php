@@ -1,36 +1,79 @@
 <?php
 require 'conexion.php';
 session_start();
+$mensaje = array();
 
 if (!isset($_SESSION['Id_Usuario'])) {
     header("Location:login.php");
 }
-$Id_Usuario = $_SESSION['Id_Usuario'];
+$Id_Usuario = $_SESSION['Id_Usuario'];//Codigo estudiante
 $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
 $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
 $nombre="";
-if($Tipo_Usuario==3){
-    $sql="SELECT * FROM  docentes WHERE Codigo_Doc = $Id_Usuario";
-        $resultado = $mysqli-> query ($sql);
-    while ($row=$resultado->fetch_assoc() ) {
-        $nombre = $row['Nombre_Doc'].' '.$row['Apellidos_Doc'];
-    }
-}
-if($Tipo_Usuario==2){
-    $sql="SELECT * FROM  estudiantes WHERE Codigo_Est = $Id_Usuario";
-        $resultado = $mysqli-> query ($sql);
-    while ($row=$resultado->fetch_assoc() ) {
+$urlP="";
+if ($Tipo_Usuario == 2) {
+    $sqlE="SELECT * FROM  estudiantes WHERE Codigo_Est = $Id_Usuario";
+    $resultadoE = $mysqli-> query ($sqlE);
+
+    while ($row=$resultadoE->fetch_assoc() ) {
         $nombre = $row['Nombre_Est'].' '.$row['Apellidos_Est'];
+        $id_pro= $row['Cod_proyecto'];
     }
 }
-if($Tipo_Usuario==1){
-    $sql="SELECT * FROM  admin WHERE Codigo_Adm = $Id_Usuario";
-        $resultado = $mysqli-> query ($sql);
-    while ($row=$resultado->fetch_assoc() ) {
-        $nombre = $row['Nombre_Adm'].' '.$row['Apellidos_Adm'];
-    }
+
+if($id_pro>0){
+    $sqlP="SELECT * FROM  proyecto WHERE Cod_proyecto = $id_pro";
+    $resultadoP = $mysqli-> query ($sqlP);
+
+if($_POST){    
+	if($_FILES["archivo"]["error"]>0){
+		// echo "Error al cargar archivo";
+        $mensaje[]="Error al cargar archivo";
+	}else{
+		///$permitidos = array("image/png","image/jpg","image/jpeg","application/pdf");
+		//$limite_kb =2000;
+
+		//if(in_array($_FILES["archivo"]["type"], $permitidos) && $_FILES["archivo"]["size"] <= $limite_kb * 1024){
+			$ruta = 'documentos/'.$Id_Usuario.'/';
+			$archivo = $ruta.$_FILES["archivo"]["name"];
+			if(!file_exists($ruta)){
+				mkdir($ruta);
+			}
+			//if(!file_exists($archivo)){
+				$resulta=@move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
+				if($resulta){
+                    $nombreP=$_FILES['archivo']['name'];
+                    $sql = "UPDATE proyecto SET Nombre_proyecto='$nombre', url_proy='$archivo' WHERE Cod_Est='$Id_Usuario'";
+                    $resultado=$mysqli->query($sql);
+                    if($resultado){
+                        $mensaje[]="Su archivo se subió con éxito";
+                        // echo "Se ha subido con exito";
+                        $sqlP="SELECT * FROM  proyecto WHERE Cod_Est = $Id_Usuario";
+                        $resultadoP = $mysqli-> query ($sqlP);
+
+                        while ($row=$resultadoP->fetch_assoc() ) {
+                            $id_Proyecto = $row['Cod_proyecto'];
+                        }
+                    }
+                    $sql2 = "UPDATE estudiantes SET Cod_proyecto='$id_Proyecto' WHERE Codigo_Est = '$Id_Usuario'";
+                    $resultado2=$mysqli->query($sql2);
+				}else{
+					// echo "Error al guardar archivo";
+                    $mensaje[]="Error al guardar archivo";
+				}
+			//}else{
+				// echo "Archivo ya existe";
+              //  $mensaje[]="El documento ya existía";
+			//}
+		//}else{
+		//	echo "Archivo no permitido o excede el tamaño";
+		//}
+	}
 }
-   
+}else {
+    $mensaje[]="Debe subir primero su anteproyecto";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +84,7 @@ if($Tipo_Usuario==1){
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Sistema Web Udenar</title>
+    <title>Enviar Propuesta</title>
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -61,7 +104,7 @@ if($Tipo_Usuario==1){
                 <div class="sidebar-brand-icon rotate-n-0">
                     <img src="img/logo1.png" aling="center" width="60" , height="60">
                 </div>
-                <div class="sidebar-brand-text mx-3">GESTIÓN MODALIDADES DE GRADO</div>
+                <div class="sidebar-brand-text mx-3">GESTION MODALIDADES DE GRADO</div>
             </a>
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
@@ -70,7 +113,6 @@ if($Tipo_Usuario==1){
                 <a class="nav-link" href="index.php">
                     <span>Universidad De Nariño</span></a>
             </li>
-
             <?php if($Tipo_Usuario==2) { ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -118,105 +160,34 @@ if($Tipo_Usuario==1){
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
             <?php } ?>
-
-            <?php if($Tipo_Usuario==3) { ?>
-            <!-- Docentes -->
-            <hr class="sidebar-divider">
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Acciones
-            </div>
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Revisar Trabajo De grado</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="visualizarProyecto.php">Revision</a>
-                        <!-- <a class="collapse-item" href="cards.html">Cards</a> -->
-                    </div>
-                </div>
-            </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-            <?php } ?>
-
-            <!-- permitimos el acceso a la secreatria -->
-            <?php if($Tipo_Usuario==1) { ?>
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Acciones
-            </div>
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Agregar Usuario</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Seleccione Tipo de Usuario:</h6>
-                        <a class="collapse-item" href="agregarEstudiante.php">Nuevo Estudiante</a>
-                        <a class="collapse-item" href="agregarDocente.php">Nuevo Docente</a>
-                        <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a> 
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>-->
-                    </div>
-                </div>
-            </li>
-            <!-- Nav Item - Charts 
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>-->
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Gestion de Usuarios</span></a>
-            </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-            <?php } ?>
-
         </ul>
         <!-- End of Sidebar -->
+
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
+
             <!-- Main Content -->
             <div id="content">
+
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <div class="topbar-divider d-none d-sm-block"></div>
                         <!-- Nav Item - User Information -->
+
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <?php echo $Nombre_Usuario.'<br>'.$nombre; ?>
                                 </span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
+
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
@@ -227,6 +198,7 @@ if($Tipo_Usuario==1){
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Configuración
+
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" data-toggle="modal" data-target="#logout" href="#">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -234,79 +206,123 @@ if($Tipo_Usuario==1){
                                     </a>
                             </div>
                         </li>
+
                     </ul>
+
                 </nav>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Escritorio De Información</h1>
-                        <?php if($Tipo_Usuario==1) { ?>
-                        <a href="agregarAdmin.php"
-                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Agregar Administrador</a>
-                        <?php }?>
-                    </div>
-                    <!-- Content Row -->
-                    <div class="row">
-                        <!-- Earnings (Monthly) Card Example -->
-                        <!-- Pending Requests Card Example -->
-                        <?php if($Tipo_Usuario==2) { ?>
-                        <div class="">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Importante</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Tener aprobado el 75% de
-                                                la totalidad de los creditos de su plan de estudio, incluidos los de
-                                                formacion humanistica y competencias basicas </div>
+                    
+                                <!-- Illustrations -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Subir el Archivo del Proyecto</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="text-center">
+                                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
+                                                src="img/undraw_posting_photo.svg" alt="...">
                                         </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Content Row -->
-                    <br>
-                    <br>
-                    <div class="row ">
-                        <!-- Area Chart  este es el cuadro donde van  los reuiqsitos -->
-                        <div class="col-xl-9 col-lg-10">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Requisitos</h6>
-                                    <div class="dropdown no-arrow">
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <p>
-                                        <h4> - Propuesta de trabajo de grado - Formato IEEE</h4>
-                                        <br>
-                                        <h4> - Estudio de hoja de vida</h4>
-                                        <br>
-                                        <h4> - Certificado de matricula</h4>
-                                        <br>
-                                        <h4> - Comprobande de pago de los derechos de inscripción</h4>
-                                        <br>
-                                        <h4> - Formato de la presentación de la propuesta firmada</h4>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php } ?>
-                        <!-- Pie Chart -->
-                        <!-- Card Body -->
-                        <!-- Content Row -->
+                                        <p>Subir su anteproyecto para revisión del docente que será asignado...</p>
+                                        </div>
+<hr>
+                                        <?php 
+                    if($id_pro>0){
                         
+
+                    
+                    ?>
+                                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Avance de Proyecto Actual</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Código del proyecto</th>
+                                            <th>Nombre del proyecto</th>
+                                            <th>URL</th>
+                                            <th>Codigo Estudiante</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        while ($row=$resultadoP->fetch_assoc() ) {
+                                            $urlP = $row['url_proy'];
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo $row['Cod_proyecto'] ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Nombre_proyecto'] ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['url_proy']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $row['Cod_Est']; ?>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    
+
+                    <!-- Tasks Card Example -->
+                    <div>
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Para
+                                            visualizar Proyecto clic en el enlace
+                                        </div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                    <a href="<?php echo $urlP;?> " target="_blank">
+                                                        <?php echo $urlP; ?>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <hr>
+                    <div class="card-body">
+                                        <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user"
+                                            enctype="multipart/form-data">
+                                            <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                                                type="file" name="archivo" id="archivo">
+                                                
+                                                    <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
+                                                
+                                            
+                                        </form>
+                                        </div>
+                                        <?php 
+                                           } ?>
+                                        <hr>
+                                        <div id="mensaje" class="text-center">
+                                            <h5>
+                                            <?php foreach($mensaje as $msg){
+                                                echo "<li>".$msg."</li>";
+                                                }?>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
                     <!-- /.container-fluid -->
                 </div>
                 <!-- End of Main Content -->
@@ -346,17 +362,24 @@ if($Tipo_Usuario==1){
                 </div>
             </div>
         </div>
+
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
         <!-- Core plugin JavaScript-->
         <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
         <!-- Custom scripts for all pages-->
         <script src="js/sb-admin-2.min.js"></script>
+
         <!-- Page level plugins -->
         <script src="vendor/chart.js/Chart.min.js"></script>
+
         <!-- Page level custom scripts -->
         <script src="js/demo/chart-area-demo.js"></script>
         <script src="js/demo/chart-pie-demo.js"></script>
+
 </body>
+
 </html>
