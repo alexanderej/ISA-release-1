@@ -29,7 +29,11 @@ if($_POST){
 		//$limite_kb =2000;
 
 		//if(in_array($_FILES["archivo"]["type"], $permitidos) && $_FILES["archivo"]["size"] <= $limite_kb * 1024){
-			$ruta = 'documentos/'.$Id_Usuario.'/';
+			$path = 'documentos';
+            if (!is_dir($path)) {
+                @mkdir($path);
+            }
+            $ruta = 'documentos/'.$Id_Usuario.'/';
 			$archivo = $ruta.$_FILES["archivo"]["name"];
 			if(!file_exists($ruta)){
 				mkdir($ruta);
