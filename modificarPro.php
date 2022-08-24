@@ -1,7 +1,11 @@
 <?php
 require 'conexion.php';
+require 'funcs.php';
+
 session_start();
 $mensaje = array();
+$errors = array();
+
 
 if (!isset($_SESSION['Id_Usuario'])) {
     header("Location:login.php");
@@ -10,6 +14,7 @@ $Id_Usuario = $_SESSION['Id_Usuario'];//Codigo estudiante
 $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
 $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
 $nombre="";
+$nombreP="";
 $urlP="";
 if ($Tipo_Usuario == 2) {
     $sqlE="SELECT * FROM  estudiantes WHERE Codigo_Est = $Id_Usuario";
@@ -25,8 +30,12 @@ if($id_pro>0){
     $sqlP="SELECT * FROM  proyecto WHERE Cod_proyecto = $id_pro";
     $resultadoP = $mysqli-> query ($sqlP);
 
-if($_POST){    
-	if($_FILES["archivo"]["error"]>0){
+if($_POST){  
+    $nombreP = $_POST['nombreP'];
+    if(isProyectoNull($nombreP)){
+        $mensaje[] = "Debe llenar todos los campos";
+    }
+	else if($_FILES["archivo"]["error"]>0){
 		// echo "Error al cargar archivo";
         $mensaje[]="Error al cargar archivo";
 	}else{
@@ -47,10 +56,10 @@ if($_POST){
 				$resulta=@move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
 				if($resulta){
                     $nombreP=$_FILES['archivo']['name'];
-                    $sql = "UPDATE proyecto SET Nombre_proyecto='$nombre', url_proy='$archivo' WHERE Cod_Est='$Id_Usuario'";
+                    $sql = "UPDATE proyecto SET Nombre_proyecto='$nombreP', url_proy='$archivo' WHERE Cod_Est='$Id_Usuario'";
                     $resultado=$mysqli->query($sql);
                     if($resultado){
-                        $mensaje[]="Su archivo se subió con éxito";
+                        $mensaje[]="Su archivo se subió con éxito<br><p>Puede revisar su estado en el apartado GESTIÓN DE TRABAJO DE GRADO</p>";
                         // echo "Se ha subido con exito";
                         $sqlP="SELECT * FROM  proyecto WHERE Cod_Est = $Id_Usuario";
                         $resultadoP = $mysqli-> query ($sqlP);
@@ -230,6 +239,13 @@ if($_POST){
                                         </div>
                                         <p>Subir su anteproyecto para revisión del docente que será asignado...</p>
                                         </div>
+                                        <div id="mensaje" class="text-center">
+                                            <h5>
+                                            <?php foreach($mensaje as $msg){
+                                                echo "<li>".$msg."</li>";
+                                                }?>
+                                            </h5>
+                                        </div>
 <hr>
                                         <?php 
                     if($id_pro>0){
@@ -307,10 +323,17 @@ if($_POST){
                     <div class="card-body">
                                         <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user"
                                             enctype="multipart/form-data">
-                                            <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                type="file" name="archivo" id="archivo">
-                                                
-                                                    <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input type="text" class="form-control form-control-user" name="nombreP" placeholder="Nombre del proyecto">
+                                            </div>
+                                            <hr>
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="file" name="archivo" id="archivo">
+                                            </div>
+                                            <br>
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
+                                            </div> 
                                                 
                                             
                                         </form>

@@ -238,7 +238,9 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <?php while ($row=$resultadoD->fetch_assoc() ) { ?>
+                                        <?php while ($row=$resultadoD->fetch_assoc() ) {
+                                            $id_Doc=$row['Codigo_Doc']; ?>
+                                            
                                         <tr>
                                             <td>
                                                 <?php echo $row['Codigo_Doc'] ?>
@@ -258,7 +260,7 @@
                                             <td>
                                                 <?php echo $row['Cel_Doc']; ?>
                                             </td>
-                                            <td> <a href="asignar.php?id_E=<?php echo $id_Estudiante; ?>&id_D=<?php echo $row['Codigo_Doc'] ?>&id_P=<?php echo $id_Proyecto; ?>"><span
+                                            <td> <a data-toggle="modal" data-target="#asignar" href="#"> <span
                                             class="fas fa-pencil-alt"></span>Asignar </a> </td>
                                         </tr>
                                         <?php } ?>
@@ -297,6 +299,24 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
+    <!-- Asignar Modal-->
+    <div class="modal fade" id="asignar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">¿Seguro quieres asignar a este docente?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="asignar.php?id_E=<?php echo $id_Estudiante;?>&id_D=<?php echo $id_Doc; ?>&id_P=<?php echo $id_Proyecto; ?>">OK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     <!-- Logout Modal-->
     <div class="modal fade" id="logout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">

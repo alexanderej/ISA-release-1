@@ -37,7 +37,7 @@
     $resultado3=$mysqli->query($sql3);
     
     if($resultado && $resultado2 && $resultado3){
-        $mensaje = "Se asignó exitosamente";
+        $mensaje = "Se asignó exitosamente el docente como jurado revisor";
     }
 
 ?>
@@ -204,7 +204,7 @@
                             class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Agregar Administrador</a>
                     </div>
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Mostrando usuarios registrados...</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Mostrando resultados...</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">

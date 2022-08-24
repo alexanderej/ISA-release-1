@@ -1,7 +1,11 @@
 <?php
 require 'conexion.php';
+require 'funcs.php';
+
 session_start();
 $mensaje = array();
+$errors = array();
+
 
 if (!isset($_SESSION['Id_Usuario'])) {
     header("Location:login.php");
@@ -10,6 +14,7 @@ $Id_Usuario = $_SESSION['Id_Usuario'];//Codigo estudiante
 $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
 $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
 $nombre="";
+$nombreP="";
 if ($Tipo_Usuario == 2) {
     $sqlE="SELECT * FROM  estudiantes WHERE Codigo_Est = $Id_Usuario";
     $resultadoE = $mysqli-> query ($sqlE);
@@ -20,8 +25,12 @@ if ($Tipo_Usuario == 2) {
     }
 }
 if($id_pro==0){
-if($_POST){    
-	if($_FILES["archivo"]["error"]>0){
+if($_POST){   
+    $nombreP = $_POST['nombreP'];
+    if(isProyectoNull($nombreP)){
+        $mensaje[] = "Debe llenar todos los campos";
+    }
+	else if($_FILES["archivo"]["error"]>0){
 		// echo "Error al cargar archivo";
         $mensaje[]="Error al cargar archivo";
 	}else{
@@ -41,11 +50,11 @@ if($_POST){
 			if(!file_exists($archivo)){
 				$resulta=@move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
 				if($resulta){
-                    $nombreP=$_FILES['archivo']['name'];
+                    //$nombreP=$_FILES['archivo']['name'];
                     $sql = "INSERT INTO proyecto (Nombre_proyecto, url_proy, Cod_Est, comentarios, Codigo_Doc) VALUES ('$nombreP','$archivo', '$Id_Usuario', '', '')";
                     $resultado=$mysqli->query($sql);
                     if($resultado){
-                        $mensaje[]="Su archivo se subió con éxito";
+                        $mensaje[]="Su archivo se subió con éxito<br><p>Puede revisar su estado en el apartado GESTIÓN DE TRABAJO DE GRADO</p>";
                         // echo "Se ha subido con exito";
                         $sqlP="SELECT * FROM  proyecto WHERE Cod_Est = $Id_Usuario";
                         $resultadoP = $mysqli-> query ($sqlP);
@@ -223,19 +232,34 @@ if($_POST){
                                                 src="img/undraw_posting_photo.svg" alt="...">
                                         </div>
                                         <p>Subir su anteproyecto para continuar con la revisión por parte del docente que será asignado...</p><hr>
+                                        <div id="mensaje" class="text-center">
+                                            <h5>
+                                            <?php foreach($mensaje as $msg){
+                                                echo "<li>".$msg."</li>";
+                                                }?>
+                                            </h5>
+                                        </div>
                                         <?php 
-                    if($id_pro!=0){
-                        echo'<p>Su anteproyecto ya fue subido para revisión del docente.</p>';
-                    }else{
+                                            if($id_pro!=0){
+                                                echo'<p>Su anteproyecto ya fue subido para revisión del docente.</p><br><p>Puede revisar su estado en el apartado GESTIÓN DE TRABAJO DE GRADO</p>';
+                                            }else{
 
-                    
-                    ?>
+                                            
+                                            ?>
                                         <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user"
                                             enctype="multipart/form-data">
-                                            <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                                type="file" name="archivo" id="archivo">
-                                                
-                                                    <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input type="text" class="form-control form-control-user" name="nombreP" placeholder="Nombre del proyecto">
+                                            </div>
+                                            <hr>
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="file" name="archivo" id="archivo">
+                                            </div>
+                                            <br>
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
+                                            </div> 
+                                            
                                                 
                                             
                                         </form>

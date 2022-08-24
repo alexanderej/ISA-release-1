@@ -31,6 +31,17 @@ function isUserNull($usuario,$pass){
     }	
 }
 
+function isProyectoNull($nombre){
+	if(strlen(trim($nombre)) < 1)
+    {
+        return true;
+        } else {
+        return false;
+    }	
+}
+
+
+
 function isEmail($email)
 	{
 		if (filter_var($email, FILTER_VALIDATE_EMAIL)){
