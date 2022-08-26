@@ -55,7 +55,7 @@ if($_POST){
 			//if(!file_exists($archivo)){
 				$resulta=@move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
 				if($resulta){
-                    $nombreP=$_FILES['archivo']['name'];
+                    //ombreP=$_FILES['archivo']['name'];
                     $sql = "UPDATE proyecto SET Nombre_proyecto='$nombreP', url_proy='$archivo' WHERE Cod_Est='$Id_Usuario'";
                     $resultado=$mysqli->query($sql);
                     if($resultado){
