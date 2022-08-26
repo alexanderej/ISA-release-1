@@ -437,7 +437,7 @@ session_start();
                                         <?php
                                         while ($row=$resultadoP->fetch_assoc() ) {
                                             $urlP = $row['url_proy'];
-                                            
+                                            $nom_pro= $row['Nombre_proyecto'];
                                         ?>
                                         <tr>
                                             <td>
@@ -475,7 +475,7 @@ session_start();
                                                 <?php
                                                 if($id_Proyecto>0){?>
                                                     <a href="<?php echo $urlP;?> " target="_blank">
-                                                        <?php echo $urlP; ?>
+                                                        <?php echo $nom_pro; ?>
                                                     </a>
                                                 <?php }else {
                                                     echo '

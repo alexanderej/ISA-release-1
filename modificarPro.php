@@ -5,7 +5,7 @@ require 'funcs.php';
 session_start();
 $mensaje = array();
 $errors = array();
-
+$nom_pro="";
 
 if (!isset($_SESSION['Id_Usuario'])) {
     header("Location:login.php");
@@ -271,6 +271,8 @@ if($_POST){
                                         <?php
                                         while ($row=$resultadoP->fetch_assoc() ) {
                                             $urlP = $row['url_proy'];
+                                            $nom_pro= $row['Nombre_proyecto'];
+
                                         ?>
                                         <tr>
                                             <td>
@@ -306,7 +308,7 @@ if($_POST){
                                             <div class="col-auto">
                                                 <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
                                                     <a href="<?php echo $urlP;?> " target="_blank">
-                                                        <?php echo $urlP; ?>
+                                                        <?php echo $nom_pro; ?>
                                                     </a>
                                                 </div>
                                             </div>

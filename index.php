@@ -291,9 +291,9 @@ if($Tipo_Usuario==1){
                                         <br>
                                         <h4> - Estudio de hoja de vida</h4>
                                         <br>
-                                        <h4> - Certificado de matricula</h4>
+                                        <h4> - Certificado de matrícula</h4>
                                         <br>
-                                        <h4> - Comprobande de pago de los derechos de inscripción</h4>
+                                        <h4> - Comprobante de pago de los derechos de inscripción</h4>
                                         <br>
                                         <h4> - Formato de la presentación de la propuesta firmada</h4>
                                         </p>
