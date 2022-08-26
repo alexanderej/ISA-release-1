@@ -260,7 +260,7 @@
                                             <td>
                                                 <?php echo $row['Cel_Doc']; ?>
                                             </td>
-                                            <td> <a data-toggle="modal" data-target="#asignar" href="#"> <span
+                                            <td> <a href="asignar.php?id_E=<?php echo $id_Estudiante;?>&id_D=<?php echo $id_Doc; ?>&id_P=<?php echo $id_Proyecto; ?>"> <span
                                             class="fas fa-pencil-alt"></span>Asignar </a> </td>
                                         </tr>
                                         <?php } ?>
