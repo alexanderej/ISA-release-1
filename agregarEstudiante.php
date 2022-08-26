@@ -98,7 +98,7 @@ if($_POST){
                 <!-- Nested Row within Card Body -->
                 <div class="row">
                     <div class="col-lg-5 d-none d-lg-block">
-                        <img id="acreditacion" align="right" src="img/acreditacion.png">
+                        <img id="acreditacion" align="right" margin="20px"; src="img/acreditacion.png">
                     </div>
                     <div class="col-lg-7">
                         <div class="p-5">
