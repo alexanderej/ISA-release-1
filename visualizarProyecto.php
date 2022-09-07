@@ -534,6 +534,75 @@ session_start();
                         </div>
                     </div>
                     <?php }?>
+
+                    
+                    <div>
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">      
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Estado de la entrega
+                                        </div>
+                                        
+                                        <table class="table table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Estado de la entrega</th>
+                                                    <td>
+                                                        <?php
+                                                            if($id_Proyecto>0){
+                                                        ?>
+                                                            Enviado para revisión
+                                                        <?php }else{?>
+                                                            No entregado
+                                                        <?php }?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Estado de la calificación</th>
+                                                    <td>
+                                                        <?php
+                                                            if($id_Proyecto>0){
+                                                        ?>
+                                                            PENDIENTE  
+                                                        <?php }else{?>
+                                                            Sin calificar
+                                                        <?php }?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">3</th>
+                                                    <td colspan="2">Larry the Bird</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <?php
+                                            // foreach($comentarios as $msg)
+                                            // {
+                                            //     echo "<li>".$msg."</li>";
+                                            // } 
+                                            echo $comentarios;
+                                            ?>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" class="user"
+                                                enctype="multipart/form-data">
+                                                <textarea name="comentarios" id="comentarios" cols="50"
+                                                    rows="5" placeholder="Escriba su comentario"></textarea><br>
+                                                <button type="submit" class="btn btn-primary btn-user">Enviar</button>
+                                            </form>
+                                        </div>
+                                    </div>       
+                                    <div class="col-auto">
+                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
                 </div>
                 <!-- /.container-fluid -->
             </div>
