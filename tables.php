@@ -113,20 +113,9 @@
                         <h6 class="collapse-header">Seleccione Tipo de Usuario:</h6>
                         <a class="collapse-item" href="agregarEstudiante.php">Nuevo Estudiante</a>
                         <a class="collapse-item" href="agregarDocente.php">Nuevo Docente</a>
-                        <!-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a> 
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item" href="blank.html">Blank Page</a>-->
                     </div>
                 </div>
             </li>
-            <!-- Nav Item - Charts 
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
-            </li>-->
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="tables.php">
@@ -299,9 +288,9 @@
                                             <td>
                                                 <?php echo $row['Correo_Adm']; ?>
                                             </td>
-                                            <td> <a href="modificar.php?id=<?php echo $row['id']; ?>"><span
+                                            <td> <a href="modificarAdm.php?id=<?php echo $row['Codigo_Adm']; ?>"><span
                                             class="fas fa-pencil-alt"></span>Modificar </a> </td>
-                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>"> <span
+                                            <td> <a href="eliminar.php?id=<?php echo $row['Codigo_Adm']; ?>"> <span
                                             class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>
@@ -429,9 +418,9 @@
                                             <td>
                                                 <?php echo $row['Cel_Doc']; ?>
                                             </td>
-                                            <td> <a href="modificar.php?id=<?php echo $row['id']; ?>"><span
+                                            <td> <a href="modificarDoc.php?id=<?php echo $row['Codigo_Doc']; ?>"><span
                                             class="fas fa-pencil-alt"></span>Modificar </a> </td>
-                                            <td> <a href="eliminar.php?id=<?php echo $row['id']; ?>"> <span
+                                            <td> <a href="eliminar.php?id=<?php echo $row['Codigo_Doc']; ?>"> <span
                                             class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>
