@@ -159,7 +159,7 @@ if($_POST){
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="visualizarProyecto.php">Revision y comentarios</a>
+                        <a class="collapse-item" href="visualizarProyecto.php?avalar=0">Revision y comentarios</a>
                         <!-- <a class="collapse-item" href="utilities-border.html">Borders</a>
                         <a class="collapse-item" href="utilities-animation.html">Animations</a>
                         <a class="collapse-item" href="utilities-other.html">Other</a> -->
