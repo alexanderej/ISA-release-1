@@ -32,7 +32,7 @@ if($_POST){
     
 
     if(count($errors) == 0){
-        ///Registrar nuevo estudiante y usuario
+        ///Registrar nuevo  y usuario
         $sql = "UPDATE docentes SET Codigo_Doc='$codigo', Cedula_Doc='$cedula', Nombre_Doc='$nombre', Apellidos_Doc='$apellidos', Correo_Doc='$email', Cel_Doc='$celular' WHERE Codigo_Doc = '$id'";
         $resultado=$mysqli->query($sql);
         //echo $resultado;
@@ -130,7 +130,7 @@ if($_POST){
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="number" class="form-control form-control-user" name="codigo"
-                                            placeholder="Código del Estudiante" value="<?php echo $row['Codigo_Doc'] ?>">
+                                            placeholder="Código del Docente" value="<?php echo $row['Codigo_Doc'] ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">

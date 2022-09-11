@@ -130,7 +130,7 @@ if($_POST){
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="number" class="form-control form-control-user" name="codigo"
-                                            placeholder="Código del Estudiante" value="<?php echo $row['Codigo_Adm'] ?>">
+                                            placeholder="Código del Administrador" value="<?php echo $row['Codigo_Adm'] ?>">
                                     </div>
                                 </div>
                                 <div class="form-group row">
