@@ -42,16 +42,19 @@ session_start();
         $sqlP="SELECT * FROM  proyecto WHERE Cod_proyecto = $id_Proyecto";
         $resultadoP = $mysqli-> query ($sqlP);
 
-        $sqlCom = "SELECT comentarios FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
-        $resultadoCom=$mysqli->query($sqlCom);
-        while ($row=$resultadoCom->fetch_assoc() ) {
+        $sqlProy = "SELECT * FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
+        $resultadoProy=$mysqli->query($sqlProy);
+        while ($row=$resultadoProy->fetch_assoc() ) {
             $comentarios = $row['comentarios'];
+<<<<<<< HEAD
 
         }
         $sqlProy = "SELECT * FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
         $resultadoProy=$mysqli->query($sqlProy);
         while ($row=$resultadoProy->fetch_assoc() ) {
             $comentarios = $row['comentarios'];
+=======
+>>>>>>> f94e7aa63e62db4935673d00c4533a910edbcbcd
             $calificaciones = $row['calificaciones'];
             $fecha = $row['fecha'];
         }
@@ -565,9 +568,16 @@ session_start();
                                             if($Tipo_Usuario==3){
                                         ?>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
+<<<<<<< HEAD
                                             <a href="visualizarProyecto.php?avalar=1" class="btn btn-primary">
                                 AVALAR
                             </a>
+=======
+                                                <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" class="user"
+                                                    enctype="multipart/form-data">
+                                                    <button type="submit" class="btn btn-primary btn-user">APROBAR</button>
+                                                </form>
+>>>>>>> f94e7aa63e62db4935673d00c4533a910edbcbcd
                                             </div>
                                             <?php }?>
                                     </div>       
@@ -591,10 +601,21 @@ session_start();
                                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                             Comentarios
                                         </div>
+<<<<<<< HEAD
                                         <div class="card mb-4"><div class="card-body"><?php
                                             echo $comentarios;
                                             ?></div></div>
                                         
+=======
+                                        
+                                        <?php
+                                            // foreach($comentarios as $msg)
+                                            // {
+                                            //     echo "<li>".$msg."</li>";
+                                            // } 
+                                            echo $comentarios;
+                                            ?>
+>>>>>>> f94e7aa63e62db4935673d00c4533a910edbcbcd
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" class="user"
                                                 enctype="multipart/form-data">
