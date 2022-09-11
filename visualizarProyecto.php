@@ -14,6 +14,8 @@ session_start();
     $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
     $nombre="";
     $comentarios = "";
+    $fecha="";
+    $aval=$_GET['avalar'];
 
     if($Tipo_Usuario==3){//////Para docentes
         $sql="SELECT * FROM  docentes WHERE Codigo_Doc = $Id_Usuario";
@@ -44,13 +46,21 @@ session_start();
         $resultadoCom=$mysqli->query($sqlCom);
         while ($row=$resultadoCom->fetch_assoc() ) {
             $comentarios = $row['comentarios'];
+
+        }
+        $sqlProy = "SELECT * FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
+        $resultadoProy=$mysqli->query($sqlProy);
+        while ($row=$resultadoProy->fetch_assoc() ) {
+            $comentarios = $row['comentarios'];
+            $calificaciones = $row['calificaciones'];
+            $fecha = $row['fecha'];
         }
 
         if($_POST){
         //echo 'Funciona post';
     ////obtener los valores de las variables del formulario
     /************************************************************* */
-    $com = $comentarios.'<div class="card mb-4"><div class="card-body">'.$_POST['comentarios'].'</div></div>';
+    $com = $comentarios.'.\n '.$_POST['comentarios'];
         $sqlP2 = "UPDATE proyecto SET comentarios='$com' WHERE Cod_proyecto = $id_Proyecto";
         $resultadoP2=$mysqli->query($sqlP2);
 
@@ -58,6 +68,18 @@ session_start();
         while ($row=$resultadoCom->fetch_assoc() ) {
             $comentarios = $row['comentarios'];
         }
+           
+    }
+     if($aval==1){
+        $sqlP3 = "UPDATE proyecto SET calificaciones='APROBADO' WHERE Cod_proyecto = $id_Proyecto";
+        $resultadoP3=$mysqli->query($sqlP3);
+
+        $sqlProy2 = "SELECT * FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
+        $resultadoProy2=$mysqli->query($sqlProy2);
+        while ($row=$resultadoProy2->fetch_assoc() ) {
+            $calificaciones = $row['calificaciones'];
+        }
+
     }
 
     
@@ -152,7 +174,7 @@ session_start();
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="visualizarProyecto.php">Revision y comentarios</a>
+                        <a class="collapse-item" href="visualizarProyecto.php?avalar=0">Revision y comentarios</a>
                         <!-- <a class="collapse-item" href="utilities-border.html">Borders</a>
                         <a class="collapse-item" href="utilities-animation.html">Animations</a>
                         <a class="collapse-item" href="utilities-other.html">Other</a> -->
@@ -184,7 +206,7 @@ session_start();
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="visualizarProyecto.php">Revision</a>
+                        <a class="collapse-item" href="visualizarProyecto.php?avalar=0">Revision</a>
                         <!-- <a class="collapse-item" href="cards.html">Cards</a> -->
                     </div>
                 </div>
@@ -497,45 +519,6 @@ session_start();
                         </div>
                     </div>
 
-                    <!-- Pending Requests Card Example -->
-                    <?php
-                    if($id_Proyecto>0){
-                        ?>
-                    <div>
-                        <div class="card border-left-warning shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">      
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Comentarios
-                                        </div>
-                                        
-                                        <?php
-                                            // foreach($comentarios as $msg)
-                                            // {
-                                            //     echo "<li>".$msg."</li>";
-                                            // } 
-                                            echo $comentarios;
-                                            ?>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" class="user"
-                                                enctype="multipart/form-data">
-                                                <textarea name="comentarios" id="comentarios" cols="50"
-                                                    rows="5" placeholder="Escriba su comentario"></textarea><br>
-                                                <button type="submit" class="btn btn-primary btn-user">Enviar</button>
-                                            </form>
-                                        </div>
-                                    </div>       
-                                    <div class="col-auto">
-                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php }?>
-
-                    
                     <div>
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
@@ -560,31 +543,58 @@ session_start();
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row">Estado de la calificación</th>
+                                                    <th scope="row">Aval del proyecto</th>
                                                     <td>
                                                         <?php
                                                             if($id_Proyecto>0){
+                                                                echo $calificaciones
                                                         ?>
-                                                            PENDIENTE  
+                                                             
                                                         <?php }else{?>
-                                                            Sin calificar
+                                                            No tiene ningun proyecto cargado
                                                         <?php }?>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row">3</th>
-                                                    <td colspan="2">Larry the Bird</td>
+                                                    <th scope="row">Fecha de resgistro </th>
+                                                    <td colspan="2"><?php echo $fecha?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
-
                                         <?php
-                                            // foreach($comentarios as $msg)
-                                            // {
-                                            //     echo "<li>".$msg."</li>";
-                                            // } 
+                                            if($Tipo_Usuario==3){
+                                        ?>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <a href="visualizarProyecto.php?avalar=1" class="btn btn-primary">
+                                AVALAR
+                            </a>
+                                            </div>
+                                            <?php }?>
+                                    </div>       
+                                    <div class="col-auto">
+                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pending Requests Card Example -->
+                    <?php
+                    if($id_Proyecto>0){
+                        ?>
+                    <div>
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">      
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Comentarios
+                                        </div>
+                                        <div class="card mb-4"><div class="card-body"><?php
                                             echo $comentarios;
-                                            ?>
+                                            ?></div></div>
+                                        
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" class="user"
                                                 enctype="multipart/form-data">
@@ -601,6 +611,10 @@ session_start();
                             </div>
                         </div>
                     </div>
+                    <?php }?>
+
+                    
+                    
                     
 
                 </div>
