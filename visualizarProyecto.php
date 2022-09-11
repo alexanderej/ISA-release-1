@@ -523,7 +523,7 @@ session_start();
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row">Estado de la calificación</th>
+                                                    <th scope="row">Aval del proyecto</th>
                                                     <td>
                                                         <?php
                                                             if($id_Proyecto>0){
