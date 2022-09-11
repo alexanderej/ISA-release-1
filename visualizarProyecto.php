@@ -58,6 +58,8 @@ session_start();
         $sqlP2 = "UPDATE proyecto SET comentarios='$com' WHERE Cod_proyecto = $id_Proyecto";
         $resultadoP2=$mysqli->query($sqlP2);
 
+        $sqlCom = "SELECT comentarios FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
+
         $resultadoCom=$mysqli->query($sqlCom);
         while ($row=$resultadoCom->fetch_assoc() ) {
             $comentarios = $row['comentarios'];
