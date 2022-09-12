@@ -129,7 +129,7 @@ session_start();
                 <div class="sidebar-brand-text mx-3">GESTION MODALIDADES DE GRADO</div>
             </a>
 
-            <!-- Divider -->
+            <!-- Divider -->----------------
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
