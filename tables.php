@@ -290,7 +290,7 @@
                                             </td>
                                             <td> <a href="modificarAdm.php?id=<?php echo $row['Codigo_Adm']; ?>"><span
                                             class="fas fa-pencil-alt"></span>Modificar </a> </td>
-                                            <td> <a href="eliminar.php?id=<?php echo $row['Codigo_Adm']; ?>"> <span
+                                            <td> <a href="eliminarAdm.php?id=<?php echo $row['Codigo_Adm']; ?>"> <span
                                             class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>
@@ -360,7 +360,7 @@
                                             </td>
                                             <td> <a href="modificarEstudiante.php?id=<?php echo $row['Codigo_Est']; ?>"><span
                                             class="fas fa-pencil-alt"></span>Modificar </a> </td>
-                                            <td> <a data-toggle="modal" data-target="#confirm-delete" href="#" > <span
+                                            <td> <a href="eliminar.php?id=<?php echo $row['Codigo_Est']; ?>" > <span
                                             class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>
@@ -420,7 +420,7 @@
                                             </td>
                                             <td> <a href="modificarDoc.php?id=<?php echo $row['Codigo_Doc']; ?>"><span
                                             class="fas fa-pencil-alt"></span>Modificar </a> </td>
-                                            <td> <a href="eliminar.php?id=<?php echo $row['Codigo_Doc']; ?>"> <span
+                                            <td> <a href="eliminarDoc.php?id=<?php echo $row['Codigo_Doc']; ?>"> <span
                                             class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>

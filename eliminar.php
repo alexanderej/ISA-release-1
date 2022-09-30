@@ -15,7 +15,6 @@
     $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
     $nombre="";
     $id = $_GET['id'];
-    $tipo = $_GET['tipo'];
 
     if ($Tipo_Usuario == 1) {
         $sqlA="SELECT * FROM  admin WHERE Codigo_Adm = $Id_Usuario";
@@ -27,7 +26,6 @@
 
     }
 
-    if ($tipo == 2) {
         $sql="SELECT * FROM  estudiantes WHERE Codigo_Est = $id";
         $resultado = $mysqli-> query ($sql);
 
@@ -62,7 +60,7 @@
         }else {
             $mensaje = "No Se eliminó";
         }
-    }
+    
     
     
 
