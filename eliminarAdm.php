@@ -26,7 +26,7 @@
         $sqlD="DELETE FROM admin WHERE Codigo_Adm = $id";///Eliminar el admin
         $resultadoD = $mysqli-> query ($sqlD);
     
-        $sqlU="DELETE FROM  usuarios WHERE Id_Usuario = $id";///Eliminar administ de la tabla usuarios
+        $sqlU="DELETE FROM  usuarios WHERE Id_Usuario = $id";///Eliminar admin de la tabla usuarios
         $resultadoU = $mysqli-> query ($sqlU);
 
         if($resultadoD){
@@ -195,7 +195,28 @@
                 </nav>
                 <!-- End of Topbar -->
 
-                
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <a href="agregarAdmin.php"
+                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Agregar Administrador</a>
+                    </div>
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">IMPORTANTE...</h1>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <!-- Una tarjeta para mostrar mensaje de si se eliminó o no -->
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"><?php echo $mensaje ?></h6>
+                        </div>
+                        <a href="tables.php" class="btn btn-primary">
+                                Regresar
+                            </a>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+
             </div>
             <!-- End of Main Content -->
 
