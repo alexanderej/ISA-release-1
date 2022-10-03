@@ -1,8 +1,10 @@
 <?php
-
    
-   require 'conexion.php';
-session_start();
+    require 'conexion.php';
+    require 'funcs.php';
+    session_start();
+    $mensaje = array();
+    $errors = array();
    // valodar siel usuarionesta iniciando sesion o no
 
    if (!isset($_SESSION['Id_Usuario'])) {
@@ -13,6 +15,8 @@ session_start();
     $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
     $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
     $nombre="";
+    $nombreA="";
+    $urlA="";
     $comentarios = "";
     $fecha="";
     $aval=$_GET['avalar'];
@@ -56,7 +60,15 @@ session_start();
             $fecha = $row['fecha'];
         }
 
-        if($_POST){
+        $sqlAval="SELECT * FROM  docentes WHERE Codigo_Doc = $Id_Usuario";
+        $resultadoAval = $mysqli-> query ($sqlAval);
+
+        while ($row=$resultadoAval->fetch_assoc() ) {
+            $nombre = $row['Nombre_Doc'].' '.$row['Apellidos_Doc'];
+            $id_aval= $row['cod_aval'];
+        }
+
+    if($_POST){
         //echo 'Funciona post';
     ////obtener los valores de las variables del formulario
     /************************************************************* */
@@ -70,7 +82,8 @@ session_start();
         }
            
     }
-     if($aval==1){
+
+    if($aval==1){
         $sqlP3 = "UPDATE proyecto SET calificaciones='APROBADO' WHERE Cod_proyecto = $id_Proyecto";
         $resultadoP3=$mysqli->query($sqlP3);
 
@@ -79,10 +92,66 @@ session_start();
         while ($row=$resultadoProy2->fetch_assoc() ) {
             $calificaciones = $row['calificaciones'];
         }
-
     }
 
-    
+    if($id_aval==0){
+        if($_POST){   
+            $nombreA = $_POST['nombreA'];
+            if(isAvalNull($nombreA)){
+                $mensaje[] = "Debe llenar todos los campos";
+            }
+            else if($_FILES["archivoA"]["error"]>0){
+                // echo "Error al cargar archivo";
+                $mensaje[]="Error al cargar archivo";
+            }else{
+                ///$permitidos = array("image/png","image/jpg","image/jpeg","application/pdf");
+                //$limite_kb =2000;
+        
+                //if(in_array($_FILES["archivo"]["type"], $permitidos) && $_FILES["archivo"]["size"] <= $limite_kb * 1024){
+                    $path = 'documentos';
+                    if (!is_dir($path)) {
+                        @mkdir($path);
+                    }
+                    $ruta = 'documentos/'.$Id_Usuario.'/';
+                    $archivo = $ruta.$_FILES["archivoA"]["name"];
+                    if(!file_exists($ruta)){
+                        mkdir($ruta);
+                    }
+                    if(!file_exists($archivoA)){
+                        $resul=@move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
+                        if($resul){
+                            //$nombreP=$_FILES['archivo']['name'];
+                            $sqlAv = "INSERT INTO aval (nombre_aval, url_aval, cod_doc, cod_est) VALUES ('$nombreA','$archivoA', '$Id_Usuario', '')";
+                            $resul=$mysqli->query($sqlAv);
+                            if($resul){
+                                $mensaje[]="El aval se subió con éxito";
+                                // echo "Se ha subido con exito";
+                                $sqlAva="SELECT * FROM  aval WHERE cod_doc = $Id_Usuario";
+                                $resulta = $mysqli-> query ($sqlAva);
+        
+                                while ($row=$resulta->fetch_assoc() ) {
+                                    $id_Avall = $row['cod_aval'];
+                                }
+                            }
+                            $sqlA2 = "UPDATE docentes SET cod_aval = '$id_Avall' WHERE Codigo_Doc = '$Id_Usuario'";
+                            $resultadoA2=$mysqli->query($sqlA2);
+                        }else{
+                            // echo "Error al guardar archivo";
+                            $mensaje[]="Error";
+                        }
+                    }else{
+                        // echo "Archivo ya existe";
+                        $mensaje[]="El aval ya existía";
+                    }
+                //}else{
+                //	echo "Archivo no permitido o excede el tamaño";
+                //}
+            }
+        }
+        }else{
+            $mensaje[]="Ya subió el aval";
+    }
+          
 ?>
 
 <!DOCTYPE html>
@@ -140,7 +209,7 @@ session_start();
                     <span>Universidad De Nariño</span></a>
             </li>
 
-
+        <!-- Estudiantes -->
             <?php if($Tipo_Usuario==2) { ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -189,6 +258,7 @@ session_start();
             </div>
             <?php } ?>
 
+        <!-- Docentes -->    
             <?php if($Tipo_Usuario==3) { ?>
             <!-- Docentes -->
             <hr class="sidebar-divider">
@@ -219,7 +289,7 @@ session_start();
             </div>
             <?php } ?>
 
-            <!-- permitimos el acceso a la secreatria -->
+            <!-- SECRETARIA permitimos el acceso a la secreatria -->
             <?php if($Tipo_Usuario==1) { ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -562,14 +632,29 @@ session_start();
                                             </tbody>
                                         </table>
                                         <?php
-                                            if($Tipo_Usuario==3){
+                                        if($Tipo_Usuario==3){
                                         ?>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <a href="visualizarProyecto.php?avalar=1" class="btn btn-primary">
-                                AVALAR
-                            </a>
+                                                AVALAR
+                                            </a>
                                             </div>
-                                            <?php }?>
+                                            <div class="card-body">
+                                                <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user" enctype="multipart/form-data">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user" name="nombreA" placeholder="Nombre del aval">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="file" name="archivoA" id="archivoA">
+                                                    </div>
+                                                    <br>
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="submit" class="btn btn-primary" name="SubirA" value="Enviar">
+                                                    </div> 
+                                                </form>
+                                            </div>
+                                        <?php }?>
                                     </div>       
                                     <div class="col-auto">
                                         <i class="fas fa-comments fa-2x text-gray-300"></i>
