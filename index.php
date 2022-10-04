@@ -137,6 +137,7 @@ if($Tipo_Usuario==1){
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="visualizarProyecto.php?avalar=0">Revision</a>
+                        <a class="collapse-item" href="generarAval.php">Generar Aval</a>
                         <!-- <a class="collapse-item" href="cards.html">Cards</a> -->
                     </div>
                 </div>

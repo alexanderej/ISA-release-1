@@ -15,8 +15,6 @@
     $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
     $Nombre_Usuario = $_SESSION['Nombre_Usuario'];
     $nombre="";
-    $nombreA="";
-    $urlA="";
     $comentarios = "";
     $fecha="";
     $aval=$_GET['avalar'];
@@ -26,6 +24,7 @@
         $resultado = $mysqli-> query ($sql);
         while ($row=$resultado->fetch_assoc() ) {
             $id_Proyecto = $row['Cod_proyecto'];////obtener codigo de proyecto asignado
+            $id_Aval = $row['cod_aval'];
             $nombre = $row['Nombre_Doc'].' '.$row['Apellidos_Doc'];
             $id_Est = $row['Codigo_Est'];/////obtener codigo de estudiante asignado
         }
@@ -37,6 +36,7 @@
         $resultado = $mysqli-> query ($sql);
         while ($row=$resultado->fetch_assoc() ) {
             $id_Proyecto = $row['Cod_proyecto'];
+            $id_Aval = $row['cod_aval'];
             $nombre = $row['Nombre_Est'].' '.$row['Apellidos_Est'];
             $id_Doc = $row['Codigo_Doc'];
         }
@@ -45,6 +45,9 @@
     }
         $sqlP="SELECT * FROM  proyecto WHERE Cod_proyecto = $id_Proyecto";
         $resultadoP = $mysqli-> query ($sqlP);
+
+        $sqlA="SELECT * FROM  aval WHERE cod_aval = $id_Aval";
+        $resultadoA = $mysqli-> query ($sqlA);
 
         $sqlCom = "SELECT comentarios FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
         $resultadoCom=$mysqli->query($sqlCom);
@@ -58,14 +61,6 @@
             $comentarios = $row['comentarios'];
             $calificaciones = $row['calificaciones'];
             $fecha = $row['fecha'];
-        }
-
-        $sqlAval="SELECT * FROM  docentes WHERE Codigo_Doc = $Id_Usuario";
-        $resultadoAval = $mysqli-> query ($sqlAval);
-
-        while ($row=$resultadoAval->fetch_assoc() ) {
-            $nombre = $row['Nombre_Doc'].' '.$row['Apellidos_Doc'];
-            $id_aval= $row['cod_aval'];
         }
 
     if($_POST){
@@ -94,63 +89,7 @@
         }
     }
 
-    if($id_aval==0){
-        if($_POST){   
-            $nombreA = $_POST['nombreA'];
-            if(isAvalNull($nombreA)){
-                $mensaje[] = "Debe llenar todos los campos";
-            }
-            else if($_FILES["archivoA"]["error"]>0){
-                // echo "Error al cargar archivo";
-                $mensaje[]="Error al cargar archivo";
-            }else{
-                ///$permitidos = array("image/png","image/jpg","image/jpeg","application/pdf");
-                //$limite_kb =2000;
-        
-                //if(in_array($_FILES["archivo"]["type"], $permitidos) && $_FILES["archivo"]["size"] <= $limite_kb * 1024){
-                    $path = 'documentos';
-                    if (!is_dir($path)) {
-                        @mkdir($path);
-                    }
-                    $ruta = 'documentos/'.$Id_Usuario.'/';
-                    $archivo = $ruta.$_FILES["archivoA"]["name"];
-                    if(!file_exists($ruta)){
-                        mkdir($ruta);
-                    }
-                    if(!file_exists($archivoA)){
-                        $resul=@move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
-                        if($resul){
-                            //$nombreP=$_FILES['archivo']['name'];
-                            $sqlAv = "INSERT INTO aval (nombre_aval, url_aval, cod_doc, cod_est) VALUES ('$nombreA','$archivoA', '$Id_Usuario', '')";
-                            $resul=$mysqli->query($sqlAv);
-                            if($resul){
-                                $mensaje[]="El aval se subió con éxito";
-                                // echo "Se ha subido con exito";
-                                $sqlAva="SELECT * FROM  aval WHERE cod_doc = $Id_Usuario";
-                                $resulta = $mysqli-> query ($sqlAva);
-        
-                                while ($row=$resulta->fetch_assoc() ) {
-                                    $id_Avall = $row['cod_aval'];
-                                }
-                            }
-                            $sqlA2 = "UPDATE docentes SET cod_aval = '$id_Avall' WHERE Codigo_Doc = '$Id_Usuario'";
-                            $resultadoA2=$mysqli->query($sqlA2);
-                        }else{
-                            // echo "Error al guardar archivo";
-                            $mensaje[]="Error";
-                        }
-                    }else{
-                        // echo "Archivo ya existe";
-                        $mensaje[]="El aval ya existía";
-                    }
-                //}else{
-                //	echo "Archivo no permitido o excede el tamaño";
-                //}
-            }
-        }
-        }else{
-            $mensaje[]="Ya subió el aval";
-    }
+    
           
 ?>
 
@@ -277,6 +216,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="visualizarProyecto.php?avalar=0">Revision</a>
+                        <a class="collapse-item" href="generarAval.php">Generar Aval</a>
                         <!-- <a class="collapse-item" href="cards.html">Cards</a> -->
                     </div>
                 </div>
@@ -639,21 +579,6 @@
                                                 AVALAR
                                             </a>
                                             </div>
-                                            <div class="card-body">
-                                                <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user" enctype="multipart/form-data">
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <input type="text" class="form-control form-control-user" name="nombreA" placeholder="Nombre del aval">
-                                                    </div>
-                                                    <hr>
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="file" name="archivoA" id="archivoA">
-                                                    </div>
-                                                    <br>
-                                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                                        <input type="submit" class="btn btn-primary" name="SubirA" value="Enviar">
-                                                    </div> 
-                                                </form>
-                                            </div>
                                         <?php }?>
                                     </div>       
                                     <div class="col-auto">
@@ -664,6 +589,47 @@
                         </div>
                     </div>
                     
+                    <div>
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">      
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Descargar Aval del Proyecto
+                                        </div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                <?php
+                                                if($id_Aval!=NULL){
+                                                
+                                                while ($row=$resultadoA->fetch_assoc() ) {
+                                                    $urlA = $row['url_aval'];
+                                                    $nom_avl= $row['nombre_aval'];
+                                                ?>
+                                                    <a href="<?php echo $urlA;?> " target="_blank">
+                                                        <?php echo $nom_avl; ?>
+                                                    </a>
+                                                <?php }}else {
+                                                    echo '
+                            <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">No se ha registrado un Proyecto aún</h6>
+                        </div>';
+                                                
+                                                }
+                                                ?>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                               
+                                    <div class="col-auto">
+                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Pending Requests Card Example -->
                     <?php
                     if($id_Proyecto>0){
