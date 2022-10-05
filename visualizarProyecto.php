@@ -24,7 +24,6 @@
         $resultado = $mysqli-> query ($sql);
         while ($row=$resultado->fetch_assoc() ) {
             $id_Proyecto = $row['Cod_proyecto'];////obtener codigo de proyecto asignado
-            $id_Aval = $row['cod_aval'];
             $nombre = $row['Nombre_Doc'].' '.$row['Apellidos_Doc'];
             $id_Est = $row['Codigo_Est'];/////obtener codigo de estudiante asignado
         }
@@ -36,7 +35,6 @@
         $resultado = $mysqli-> query ($sql);
         while ($row=$resultado->fetch_assoc() ) {
             $id_Proyecto = $row['Cod_proyecto'];
-            $id_Aval = $row['cod_aval'];
             $nombre = $row['Nombre_Est'].' '.$row['Apellidos_Est'];
             $id_Doc = $row['Codigo_Doc'];
         }
@@ -45,9 +43,6 @@
     }
         $sqlP="SELECT * FROM  proyecto WHERE Cod_proyecto = $id_Proyecto";
         $resultadoP = $mysqli-> query ($sqlP);
-
-        $sqlA="SELECT * FROM  aval WHERE cod_aval = $id_Aval";
-        $resultadoA = $mysqli-> query ($sqlA);
 
         $sqlCom = "SELECT comentarios FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
         $resultadoCom=$mysqli->query($sqlCom);
@@ -61,6 +56,7 @@
             $comentarios = $row['comentarios'];
             $calificaciones = $row['calificaciones'];
             $fecha = $row['fecha'];
+            $url_A = $row['url_aval'];
         }
 
     if($_POST){
@@ -588,32 +584,31 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <?php
+                    if($id_Proyecto>0){
+                    ?>
                     <div>
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">      
                                     <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                             Descargar Aval del Proyecto
                                         </div>
                                         <div class="row no-gutters align-items-center">
                                             <div class="col-auto">
                                                 <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
                                                 <?php
-                                                if($id_Aval!=NULL){
+                                                if($url_A!=""){
                                                 
-                                                while ($row=$resultadoA->fetch_assoc() ) {
-                                                    $urlA = $row['url_aval'];
-                                                    $nom_avl= $row['nombre_aval'];
                                                 ?>
-                                                    <a href="<?php echo $urlA;?> " target="_blank">
-                                                        <?php echo $nom_avl; ?>
+                                                    <a href="<?php echo $url_A;?> " target="_blank">
+                                                        <?php echo $url_A; ?>
                                                     </a>
-                                                <?php }}else {
+                                                <?php }else {
                                                     echo '
                             <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">No se ha registrado un Proyecto aún</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">No se a generado su aval</h6>
                         </div>';
                                                 
                                                 }
@@ -622,14 +617,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                               
+                                    </div>      
                                     <div class="col-auto">
-                                        <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                    </div>
+                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <?php
+                    }
+                    ?>
                     <!-- Pending Requests Card Example -->
                     <?php
                     if($id_Proyecto>0){

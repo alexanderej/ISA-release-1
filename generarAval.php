@@ -21,27 +21,24 @@ if ($Tipo_Usuario == 3) {
 
     while ($row=$resultadoD->fetch_assoc() ) {
         $nombre = $row['Nombre_Doc'].' '.$row['Apellidos_Doc'];
-        $id_aval= $row['cod_aval'];
+        $id_Proyecto = $row['Cod_proyecto'];
         $id_Est = $row['Codigo_Est'];
     }
 }
 
+$sqlProy = "SELECT * FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
+$resultadoProy=$mysqli->query($sqlProy);
+while ($row=$resultadoProy->fetch_assoc() ) {
+    $url_Av = $row['url_aval'];
+}
 
-if($id_aval==0){
+if($id_Proyecto>0){
+if($url_Av==""){
 if($_POST){   
-    $nombreA = $_POST['nombreA'];
-    if(isProyectoNull($nombreA)){
-        $mensaje[] = "Debe llenar todos los campos";
-    }
-	else if($_FILES["archivo"]["error"]>0){
-		// echo "Error al cargar archivo";
+	if($_FILES["archivo"]["error"]>0){
         $mensaje[]="Error al cargar archivo";
 	}else{
-		///$permitidos = array("image/png","image/jpg","image/jpeg","application/pdf");
-		//$limite_kb =2000;
-
-		//if(in_array($_FILES["archivo"]["type"], $permitidos) && $_FILES["archivo"]["size"] <= $limite_kb * 1024){
-			$path = 'documentos';
+		    $path = 'documentos';
             if (!is_dir($path)) {
                 @mkdir($path);
             }
@@ -53,36 +50,23 @@ if($_POST){
 			if(!file_exists($archivo)){
 				$resulta=@move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
 				if($resulta){
-                    //$nombreP=$_FILES['archivo']['name'];
-                    $sql = "INSERT INTO aval (nombre_aval, url_aval, cod_doc, cod_est) VALUES ('$nombreA','$archivo', '$Id_Usuario', '$id_Est')";
-                    $resultado=$mysqli->query($sql);
+                    $sql2 = "UPDATE proyecto SET url_aval='$archivo' WHERE Codigo_Doc = '$Id_Usuario'";
+                    $resultado=$mysqli->query($sql2);
+
                     if($resultado){
                         $mensaje[]="El aval se subió con éxito</p>";
-                        // echo "Se ha subido con exito";
-                        $sqlA="SELECT * FROM  aval WHERE cod_doc = $Id_Usuario";
-                        $resultadoA = $mysqli-> query ($sqlA);
-
-                        while ($row=$resultadoA->fetch_assoc() ) {
-                            $id_Aval = $row['cod_aval'];
-                        }
                     }
-                    $sql2 = "UPDATE docentes SET cod_aval='$id_Aval' WHERE Codigo_Doc = '$Id_Usuario'";
-                    $resultado2=$mysqli->query($sql2);
 				}else{
-					// echo "Error al guardar archivo";
                     $mensaje[]="Error al guardar archivo";
 				}
 			}else{
-				// echo "Archivo ya existe";
                 $mensaje[]="El documento ya existía";
 			}
-		//}else{
-		//	echo "Archivo no permitido o excede el tamaño";
-		//}
 	}
 }
 }else{
     $mensaje[]="Ya subió el aval";
+}
 }
 ?>
 
@@ -123,8 +107,8 @@ if($_POST){
                 <a class="nav-link" href="index.php">
                     <span>Universidad De Nariño</span></a>
             </li>
-            <?php if($Tipo_Usuario==2) { ?>
-            <!-- Divider -->
+            <?php if($Tipo_Usuario==3) { ?>
+            <!-- Docentes -->
             <hr class="sidebar-divider">
             <!-- Heading -->
             <div class="sidebar-heading">
@@ -135,31 +119,14 @@ if($_POST){
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Inscripción Trabajo de Grado</span>
+                    <span>Revisar Trabajo De grado</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="enviarPro.php">Enviar Propuesta</a>
-                        <a class="collapse-item" href="modificarPro.php">Modificar Propuesta</a>
-                    </div>
-                </div>
-            </li>
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Gestion Trabajo De Grado</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="visualizarProyecto.php?avalar=0">Revision y comentarios</a>
-                        <!-- <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a> -->
+                        <a class="collapse-item" href="visualizarProyecto.php?avalar=0">Revision</a>
+                        <a class="collapse-item" href="generarAval.php">Generar Aval</a>
+                        <!-- <a class="collapse-item" href="cards.html">Cards</a> -->
                     </div>
                 </div>
             </li>
@@ -227,50 +194,51 @@ if($_POST){
                                 <!-- Illustrations -->
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Subir el Archivo del Proyecto</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Subir el Aval del Proyecto</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="text-center">
-                                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                                src="img/undraw_posting_photo.svg" alt="...">
+                                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 15rem;"
+                                            src="img/aval.png" alt="...">
                                         </div>
-                                        <p>Subir su anteproyecto para continuar con la revisión por parte del docente que será asignado...</p><hr>
-                                        <div id="mensaje" class="text-center">
-                                            <h5>
-                                            <?php foreach($mensaje as $msg){
-                                                echo "<li>".$msg."</li>";
-                                                }?>
-                                            </h5>
-                                        </div>
-                                        <?php 
-                                            if($id_aval>0){
-                                                echo'<p>Su anteproyecto ya fue subido para revisión del docente.</p><br><p>Puede revisar su estado en el apartado GESTIÓN DE TRABAJO DE GRADO</p>';
-                                            }else{
-
-                                            
-                                        ?>
-                                        <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user"
-                                            enctype="multipart/form-data">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user" name="nombreA" placeholder="Nombre del aval">
-                                            </div>
-                                            <hr>
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="file" name="archivo" id="archivo">
-                                            </div>
-                                            <br>
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
-                                            </div>  
-                                        </form>
-                                        <?php 
-                                           } ?>
                                         <hr>
-                                        <div id="mensaje">
-                                            <?php foreach($mensaje as $msg){
-                                                echo "<li>".$msg."</li>";
-                                                }?>
-                                        </div>
+                                        <?php
+                                        if($id_Proyecto>0){
+                                        ?>
+                                            <div id="mensaje" class="text-center">
+                                                <h5>
+                                                <?php foreach($mensaje as $msg){
+                                                    echo "<li>".$msg."</li>";
+                                                    }?>
+                                                </h5>
+                                            </div>
+                                            <?php 
+                                                if($url_Av!=""){
+                                                    echo'<p>Su anteproyecto ya fue subido para revisión del docente.</p><br><p>Puede revisar su estado en el apartado GESTIÓN DE TRABAJO DE GRADO</p>';
+                                                }else{
+
+                                                
+                                            ?>
+                                            <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user"
+                                                enctype="multipart/form-data">
+                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                    <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="file" name="archivo" id="archivo">
+                                                </div>
+                                                <br>
+                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                    <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
+                                                </div>  
+                                            </form>
+                                            <?php 
+                                            } ?>
+                                            <hr>
+                                            <div id="mensaje">
+                                                <?php foreach($mensaje as $msg){
+                                                    echo "<li>".$msg."</li>";
+                                                    }?>
+                                            </div>
+                                        <?php 
+                                        }?>  
                                     </div>
                                 </div>
                     <!-- /.container-fluid -->
