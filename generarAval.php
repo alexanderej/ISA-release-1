@@ -214,7 +214,7 @@ if($_POST){
                                             </div>
                                             <?php 
                                                 if($url_Av!=""){
-                                                    echo'<p>Su anteproyecto ya fue subido para revisión del docente.</p><br><p>Puede revisar su estado en el apartado GESTIÓN DE TRABAJO DE GRADO</p>';
+                                                    echo'<p>Ya fue generado un aval.</p><br><p>Puede visualizarlo en REVISION DE TRABAJO DE GRADO</p>';
                                                 }else{
 
                                                 
