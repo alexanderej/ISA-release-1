@@ -15,7 +15,7 @@
     $id = $_GET['id'];//recibir el id de la anterior pagina
     $id_est=0;
     $id_pro=0;
-    
+    $mensaje="";
     //$tipo = $_GET['tipo'];
 
     if ($Tipo_Usuario == 1) {///obtener nombres y apellidos del administrador
@@ -44,13 +44,12 @@
         if($id_est>0){
             $sqlE="UPDATE estudiantes SET Codigo_Doc='' WHERE Codigo_Est = $id_est";///en la tabla del estuadiante se asigna un codigo de docente vacio ya que se elimino su docente
             $resultadoE = $mysqli-> query ($sqlE);
+        }
         if($resultadoD){
             $mensaje = "Se eliminó exitosamente";
         }else {
             $mensaje = "No Se eliminó";
         }
-        }
-        
     
     
     

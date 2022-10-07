@@ -37,7 +37,7 @@ if($_POST){
         $sql2 = "INSERT INTO usuarios (Id_Usuario, Usuario, Password, Nombre_Usuario, Tipo_Usuario) VALUES ('$codigo','$codigo', '$pass', 'DOCENTE', '3')";
         $resultado2=$mysqli->query($sql2);
 
-        if($resultado && $resultado2){
+        if($resultado){
             $mensaje[] ="El Docente $nombre $apellidos ha sido registrado exitosamente";
             ////////enviar un correo//////////////////////////////////////
             $url = 'http://'.$_SERVER["SERVER_NAME"].'/ISA-release-1/login.php';
@@ -63,7 +63,7 @@ if($_POST){
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
 
