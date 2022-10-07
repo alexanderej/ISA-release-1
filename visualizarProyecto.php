@@ -62,10 +62,10 @@
     {
         if($_POST){
             if ($comentarios=="") {
-                $com = 'Docente: '.$_POST['comentarios'];
+                $com = 'Docente: '.$_POST['comentarios'];///Es el primer comentario
             }
             if ($comentarios!="") {
-                $com = $comentarios.'/Docente: '.$_POST['comentarios'];
+                $com = $comentarios.'/Docente: '.$_POST['comentarios'];///Si ya hay comentarios los concatenamos
             }
             $sqlP2 = "UPDATE proyecto SET comentarios='$com' WHERE Cod_proyecto = $id_Proyecto";
             $resultadoP2=$mysqli->query($sqlP2);
@@ -81,7 +81,7 @@
     {
         if($_POST){
             if ($comentarios=="") {
-                $com = 'Estudiante: '.$_POST['comentarios'];
+                $com = 'Estudiante: '.$_POST['comentarios'];///Es el primer comentario
             }
             if ($comentarios!="") {
                 $com = $comentarios.'/Estudiante: '.$_POST['comentarios'];
