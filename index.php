@@ -324,7 +324,7 @@ if($Tipo_Usuario==1){
                             <div class="card-body">
                                 <h5 class="card-title">Registrar Estudiante</h5>
                                 <p class="card-text">
-                                    <a href="agregarAdmin.php" class="small-box-footer">Acceder <i class="fas fa-arrow-circle-right"></i></a>
+                                    <a href="agregarEstudiante.php" class="small-box-footer">Acceder <i class="fas fa-arrow-circle-right"></i></a>
                                 </p>
                             </div>
                             </div>
