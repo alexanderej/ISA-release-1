@@ -291,7 +291,7 @@
                                             <td> <a href="modificarAdm.php?id=<?php echo $row['Codigo_Adm']; ?>"><span
                                             class="fas fa-pencil-alt"></span>Modificar </a> </td>
                                             
-                                            <td> <a onclick="return confirm ('seguro quiere eliminar?')" class="..." href="eliminarAdm.php?id=<?php echo $row['Codigo_Adm']; ?>"> <span
+                                            <td> <a onclick="return confirm ('Está seguro que desea eliminar un administrador?')" class="..." href="eliminarAdm.php?id=<?php echo $row['Codigo_Adm']; ?>"> <span
                                             class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>
