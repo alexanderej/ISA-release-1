@@ -245,7 +245,7 @@ if($_POST){
                                             }else{
 
                                             
-                                            ?>
+                                        ?>
                                         <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user"
                                             enctype="multipart/form-data">
                                             <div class="col-sm-6 mb-3 mb-sm-0">
@@ -258,10 +258,7 @@ if($_POST){
                                             <br>
                                             <div class="col-sm-6 mb-3 mb-sm-0">
                                                 <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
-                                            </div> 
-                                            
-                                                
-                                            
+                                            </div>  
                                         </form>
                                         <?php 
                                            } ?>

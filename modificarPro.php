@@ -247,11 +247,8 @@ if($_POST){
                                             </h5>
                                         </div>
 <hr>
-                                        <?php 
+                    <?php 
                     if($id_pro>0){
-                        
-
-                    
                     ?>
                                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Avance de Proyecto Actual</h6>
@@ -323,37 +320,34 @@ if($_POST){
                     </div>
                     <hr>
                     <div class="card-body">
-                                        <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user"
-                                            enctype="multipart/form-data">
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" class="form-control form-control-user" name="nombreP" placeholder="Nombre del proyecto">
-                                            </div>
-                                            <hr>
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="file" name="archivo" id="archivo">
-                                            </div>
-                                            <br>
-                                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
-                                            </div> 
-                                                
-                                            
-                                        </form>
-                                        </div>
-                                        <?php 
-                                           } ?>
-                                        <hr>
-                                        <div id="mensaje" class="text-center">
-                                            <h5>
-                                            <?php foreach($mensaje as $msg){
-                                                echo "<li>".$msg."</li>";
-                                                }?>
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </div>
-                    <!-- /.container-fluid -->
+                        <form method="POST" action="<?php $_SERVER['PHP_SELF'] ?>" , class="user" enctype="multipart/form-data">
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input type="text" class="form-control form-control-user" name="nombreP" placeholder="Nombre del proyecto">
+                            </div>
+                            <hr>
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="file" name="archivo" id="archivo">
+                            </div>
+                            <br>
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input type="submit" class="btn btn-primary" name="Subir" value="Enviar">
+                            </div> 
+                        </form>
+                    </div>
+                    <?php 
+                    } ?>
+                    <hr>
+                    <div id="mensaje" class="text-center">
+                        <h5>
+                        <?php foreach($mensaje as $msg){
+                            echo "<li>".$msg."</li>";
+                        }?>
+                        </h5>
+                    </div>
                 </div>
+            </div>
+                    <!-- /.container-fluid -->
+        </div>
                 <!-- End of Main Content -->
                 <!-- Footer -->
                 <footer class="sticky-footer bg-white">

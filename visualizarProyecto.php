@@ -1,13 +1,14 @@
 <?php
-
    
-   require 'conexion.php';
-session_start();
-   // valodar siel usuarionesta iniciando sesion o no
-
-   if (!isset($_SESSION['Id_Usuario'])) {
+    require 'conexion.php';
+    require 'funcs.php';
+    session_start();
+    $mensaje = array();
+    $errors = array();
+  
+    if (!isset($_SESSION['Id_Usuario'])) {
        header("Location:login.php");
-     }
+    }
 
     $Id_Usuario=$_SESSION['Id_Usuario'];    
     $Tipo_Usuario = $_SESSION['Tipo_Usuario'];
@@ -39,38 +40,63 @@ session_start();
         $sqlD="SELECT * FROM  docentes WHERE Codigo_Doc = $id_Doc";
         $resultadoD = $mysqli-> query ($sqlD);
     }
-        $sqlP="SELECT * FROM  proyecto WHERE Cod_proyecto = $id_Proyecto";
-        $resultadoP = $mysqli-> query ($sqlP);
+    $sqlP="SELECT * FROM  proyecto WHERE Cod_proyecto = $id_Proyecto";
+    $resultadoP = $mysqli-> query ($sqlP);
 
-        $sqlCom = "SELECT comentarios FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
-        $resultadoCom=$mysqli->query($sqlCom);
-        while ($row=$resultadoCom->fetch_assoc() ) {
-            $comentarios = $row['comentarios'];
-
-        }
-        $sqlProy = "SELECT * FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
-        $resultadoProy=$mysqli->query($sqlProy);
-        while ($row=$resultadoProy->fetch_assoc() ) {
-            $comentarios = $row['comentarios'];
-            $calificaciones = $row['calificaciones'];
-            $fecha = $row['fecha'];
-        }
-
-        if($_POST){
-        //echo 'Funciona post';
-    ////obtener los valores de las variables del formulario
-    /************************************************************* */
-    $com = $comentarios.'.\n '.$_POST['comentarios'];
-        $sqlP2 = "UPDATE proyecto SET comentarios='$com' WHERE Cod_proyecto = $id_Proyecto";
-        $resultadoP2=$mysqli->query($sqlP2);
-
-        $resultadoCom=$mysqli->query($sqlCom);
-        while ($row=$resultadoCom->fetch_assoc() ) {
-            $comentarios = $row['comentarios'];
-        }
-           
+    $sqlCom = "SELECT comentarios FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
+    $resultadoCom=$mysqli->query($sqlCom);
+    while ($row=$resultadoCom->fetch_assoc() ) {
+        $comentarios = $row['comentarios'];
     }
-     if($aval==1){
+    $sqlProy = "SELECT * FROM proyecto WHERE Cod_proyecto = $id_Proyecto";
+    $resultadoProy=$mysqli->query($sqlProy);
+    while ($row=$resultadoProy->fetch_assoc() ) {
+        $comentarios = $row['comentarios'];
+        $calificaciones = $row['calificaciones'];
+        $fecha = $row['fecha'];
+        $url_A = $row['url_aval'];
+    }
+
+    if ($Tipo_Usuario==3) 
+    # guardar comentarios del docente
+    {
+        if($_POST){
+            if ($comentarios=="") {
+                $com = 'Docente: '.$_POST['comentarios'];///Es el primer comentario
+            }
+            if ($comentarios!="") {
+                $com = $comentarios.'/Docente: '.$_POST['comentarios'];///Si ya hay comentarios los concatenamos
+            }
+            $sqlP2 = "UPDATE proyecto SET comentarios='$com' WHERE Cod_proyecto = $id_Proyecto";
+            $resultadoP2=$mysqli->query($sqlP2);
+
+            $resultadoCom=$mysqli->query($sqlCom);
+            while ($row=$resultadoCom->fetch_assoc() ) {
+                $comentarios = $row['comentarios'];
+            }
+        }
+    }
+    if ($Tipo_Usuario==2) 
+    # guardar comentarios del estudiante
+    {
+        if($_POST){
+            if ($comentarios=="") {
+                $com = 'Estudiante: '.$_POST['comentarios'];///Es el primer comentario
+            }
+            if ($comentarios!="") {
+                $com = $comentarios.'/Estudiante: '.$_POST['comentarios'];
+            }
+            $sqlP2 = "UPDATE proyecto SET comentarios='$com' WHERE Cod_proyecto = $id_Proyecto";
+            $resultadoP2=$mysqli->query($sqlP2);
+
+            $resultadoCom=$mysqli->query($sqlCom);
+            while ($row=$resultadoCom->fetch_assoc() ) {
+                $comentarios = $row['comentarios'];
+            }
+        }
+    }
+
+    if($aval==1){
         $sqlP3 = "UPDATE proyecto SET calificaciones='APROBADO' WHERE Cod_proyecto = $id_Proyecto";
         $resultadoP3=$mysqli->query($sqlP3);
 
@@ -79,10 +105,10 @@ session_start();
         while ($row=$resultadoProy2->fetch_assoc() ) {
             $calificaciones = $row['calificaciones'];
         }
-
     }
 
     
+          
 ?>
 
 <!DOCTYPE html>
@@ -140,7 +166,7 @@ session_start();
                     <span>Universidad De Nariño</span></a>
             </li>
 
-
+        <!-- Estudiantes -->
             <?php if($Tipo_Usuario==2) { ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -189,6 +215,7 @@ session_start();
             </div>
             <?php } ?>
 
+        <!-- Docentes -->    
             <?php if($Tipo_Usuario==3) { ?>
             <!-- Docentes -->
             <hr class="sidebar-divider">
@@ -207,6 +234,7 @@ session_start();
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="visualizarProyecto.php?avalar=0">Revision</a>
+                        <a class="collapse-item" href="generarAval.php">Generar Aval</a>
                         <!-- <a class="collapse-item" href="cards.html">Cards</a> -->
                     </div>
                 </div>
@@ -219,7 +247,7 @@ session_start();
             </div>
             <?php } ?>
 
-            <!-- permitimos el acceso a la secreatria -->
+            <!-- SECRETARIA permitimos el acceso a la secreatria -->
             <?php if($Tipo_Usuario==1) { ?>
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -562,14 +590,14 @@ session_start();
                                             </tbody>
                                         </table>
                                         <?php
-                                            if($Tipo_Usuario==3){
-                                        ?>
+                                        if($Tipo_Usuario==3){
+                                            if($aval==0){ ?>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <a href="visualizarProyecto.php?avalar=1" class="btn btn-primary">
-                                AVALAR
-                            </a>
+                                                AVALAR
+                                            </a>
                                             </div>
-                                            <?php }?>
+                                        <?php }}?>
                                     </div>       
                                     <div class="col-auto">
                                         <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -578,22 +606,78 @@ session_start();
                             </div>
                         </div>
                     </div>
-                    
+                    <?php
+                    if($id_Proyecto>0){
+                    ?>
+                    <div>
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">      
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            Descargar Aval del Proyecto
+                                        </div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                <?php
+                                                if($url_A!=""){
+                                                
+                                                ?>
+                                                    <a href="<?php echo $url_A;?> " target="_blank">
+                                                        <?php echo $url_A; ?>
+                                                    </a>
+                                                <?php }else {
+                                                    echo '
+                            <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">No se a generado su aval</h6>
+                        </div>';
+                                                
+                                                }
+                                                ?>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>      
+                                    <div class="col-auto">
+                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    }
+                    ?>
                     <!-- Pending Requests Card Example -->
                     <?php
                     if($id_Proyecto>0){
                         ?>
                     <div>
                         <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-header py-3"> 
+                                <h6 class="m-0 font-weight-bold text-center text-primary">Comentarios...</h6>
+                            </div>        
                             <div class="card-body">
-                                <div class="row no-gutters align-items-center">      
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Comentarios
-                                        </div>
-                                        <div class="card mb-4"><div class="card-body"><?php
-                                            echo $comentarios;
-                                            ?></div></div>
+                                
+
+                                        <?php
+                                        if ($comentarios!="") 
+                                        {$comentario = explode("/", $comentarios);
+                                        foreach ($comentario as $key) {
+
+                                        echo '<div class="col-auto">
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><div class="card-header py-3">
+                                        <h6 class="m-0">'
+                                             .$key.
+                                        '</h6>
+                                        </div></div></div>';
+                                        }}
+                                        
+                                            ?>
+                                
+                                    <hr>
                                         
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" class="user"
@@ -603,11 +687,11 @@ session_start();
                                                 <button type="submit" class="btn btn-primary btn-user">Enviar</button>
                                             </form>
                                         </div>
-                                    </div>       
+                                    <!-- </div>        -->
                                     <div class="col-auto">
                                         <i class="fas fa-comments fa-2x text-gray-300"></i>
                                     </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

@@ -137,6 +137,7 @@ if($Tipo_Usuario==1){
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="visualizarProyecto.php?avalar=0">Revision</a>
+                        <a class="collapse-item" href="generarAval.php">Generar Aval</a>
                         <!-- <a class="collapse-item" href="cards.html">Cards</a> -->
                     </div>
                 </div>
@@ -309,6 +310,54 @@ if($Tipo_Usuario==1){
                     </div>
                     <!-- /.container-fluid -->
                 </div>
+
+                <!------------------------------------------------------------------------------->
+                <?php
+                if($Tipo_Usuario==1){ 
+                ?>
+                <div class="container-fluid">
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <div class="col" align="center">
+                            <div class="card">
+                                <br>
+                            <img src="img/estudiante.png" class="card-img-top" alt="Hollywood Sign on The Hill"/>
+                            <div class="card-body">
+                                <h5 class="card-title">Registrar Estudiante</h5>
+                                <p class="card-text">
+                                    <a href="agregarEstudiante.php" class="small-box-footer">Acceder <i class="fas fa-arrow-circle-right"></i></a>
+                                </p>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col" align="center">
+                            <div class="card">
+                            <img src="img/docente.png" class="card-img-top" alt="Palm Springs Road"/>
+                            <div class="card-body">
+                                <h5 class="card-title">Registrar Docente</h5>
+                                <p class="card-text">
+                                    <a href="agregarDocente.php" class="small-box-footer">Acceder <i class="fas fa-arrow-circle-right"></i></a>
+                                </p>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col" align="center">
+                            <div class="card py-1" >
+                            <br>
+                            <img src="img/gestion.png" class="card-img-top" alt="Los Angeles Skyscrapers"/>
+                            <div class="card-body">
+                                <h5 class="card-title">Gestion de Usuarios</h5>
+                                <p class="card-text">
+                                    <a href="tables.php" class="small-box-footer">Acceder <i class="fas fa-arrow-circle-right"></i></a>
+                                </p>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+                <!------------------------------------------------------------------------------->
+                
+                    
                 <!-- End of Main Content -->
                 <!-- Footer -->
                 <footer class="sticky-footer bg-white">
