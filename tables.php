@@ -420,7 +420,7 @@
                                             </td>
                                             <td> <a href="modificarDoc.php?id=<?php echo $row['Codigo_Doc']; ?>"><span
                                             class="fas fa-pencil-alt"></span>Modificar </a> </td>
-                                            <td> <a href="eliminarDoc.php?id=<?php echo $row['Codigo_Doc']; ?>"> <span
+                                            <td> <a onclick="return confirm ('seguro quiere eliminar?')" href="eliminarDoc.php?id=<?php echo $row['Codigo_Doc']; ?>"> <span
                                             class="fas fa-trash"></span>Eliminar </a> </td>
                                         </tr>
                                         <?php } ?>
